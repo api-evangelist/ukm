@@ -1,0 +1,45 @@
+---
+name: Universiti Kebangsaan Malaysia
+description: Universiti Kebangsaan Malaysia public developer/API footprint review for APIs.json cataloging.
+url: https://raw.githubusercontent.com/api-evangelist/ukm/refs/heads/main/review.yml
+created: '2026-06-03'
+modified: '2026-06-03'
+reviews:
+  - date: '2026-06-03'
+    rating: 2
+    summary: >-
+      UKM has no general-purpose developer portal or openly documented web APIs;
+      most student/staff online services sit behind institutional single
+      sign-on. The verifiable, machine-readable footprint is library-operated
+      scholarly infrastructure: the DSpace UKM Learning and Research Repository
+      OAI-PMH endpoint was confirmed live (valid OAI-PMH 2.0 Identify), and the
+      EPrints UKM Journal Article Repository is registry-confirmed (ROAR /
+      OpenDOAR) as OAI-PMH 2.0 capable but its host did not respond to automated
+      probes during this review. No official UKM GitHub organization was found
+      (github.com/ukm is an unrelated personal account and was excluded). No
+      endpoints were fabricated.
+    endpoints:
+      - url: https://ptsldigital.ukm.my/oai/request?verb=Identify
+        status: 200
+        note: DSpace OAI-PMH 2.0 Identify confirmed live (UKM Learning and Research Repository).
+      - url: https://ptsldigital.ukm.my/
+        status: 200
+        note: DSpace repository home page resolves.
+      - url: http://journalarticle.ukm.my/cgi/oai2?verb=Identify
+        status: 0
+        note: EPrints OAI-PMH endpoint; host did not resolve from automated probes, registry-confirmed via OpenDOAR/ROAR.
+      - url: http://journalarticle.ukm.my/
+        status: 0
+        note: EPrints repository home; intermittently unreachable from probe environment.
+      - url: https://opendoar.ac.uk/repository/2122
+        status: 200
+        note: OpenDOAR registry record confirming UKM Journal Article Repository OAI-PMH support.
+      - url: https://www.ukm.my/portalukm/
+        status: 200
+        note: Official UKM portal / website.
+      - url: https://www.ukm.my/bankdataukm/
+        status: 200
+        note: Bank Data UKM data directory page resolves; no documented public API surface.
+      - url: https://github.com/ukm
+        status: 200
+        note: Unrelated personal GitHub account, not affiliated with UKM; excluded from catalog.

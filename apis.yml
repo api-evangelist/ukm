@@ -1,0 +1,80 @@
+---
+aid: ukm
+name: Universiti Kebangsaan Malaysia
+description: >-
+  Universiti Kebangsaan Malaysia (UKM), The National University of Malaysia, is
+  a public research university in Bangi, Selangor, ranked #138 in the QS World
+  University Rankings 2025. Its public, machine-readable developer footprint is
+  concentrated in scholarly-communication infrastructure operated by the
+  Perpustakaan Tun Seri Lanang (UKM Library): a DSpace-based UKM Learning and
+  Research Repository and an EPrints-based UKM Journal Article Repository, both
+  of which expose standards-based OAI-PMH harvesting interfaces. UKM does not
+  publish a general-purpose developer portal; student and staff online services
+  are gated behind institutional single sign-on and are not openly documented.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/ukm/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Research
+  - Open Access
+  - Institutional Repository
+  - OAI-PMH
+  - Library
+  - Malaysia
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: ukm:learning-research-repository-oai
+    name: UKM Learning and Research Repository (OAI-PMH)
+    description: >-
+      DSpace-based institutional repository operated by Perpustakaan Tun Seri
+      Lanang (UKM Library) providing access to theses, past-year exam papers,
+      selected government publications and law documents. It exposes a valid
+      OAI-PMH 2.0 metadata-harvesting interface (Identify confirmed live).
+    humanURL: https://ptsldigital.ukm.my/
+    baseURL: https://ptsldigital.ukm.my/oai/request
+    tags: [ Institutional Repository, OAI-PMH, DSpace, Open Access, Research, Library ]
+    properties:
+      - type: Documentation
+        url: https://ptsldigital.ukm.my/
+      - type: OAI-PMH
+        url: https://ptsldigital.ukm.my/oai/request?verb=Identify
+  - aid: ukm:journal-article-repository-oai
+    name: UKM Journal Article Repository (OAI-PMH)
+    description: >-
+      EPrints-based repository of journal articles published by UKM
+      faculties, institutes and UKM Press. Registered in ROAR and OpenDOAR as
+      supporting OAI-PMH 2.0 harvesting via its EPrints oai2 interface. (Host
+      intermittently unreachable from automated probes; registry-confirmed.)
+    humanURL: http://journalarticle.ukm.my/
+    baseURL: http://journalarticle.ukm.my/cgi/oai2
+    tags: [ Institutional Repository, OAI-PMH, EPrints, Open Access, Research, Library ]
+    properties:
+      - type: Documentation
+        url: http://journalarticle.ukm.my/eprints/
+      - type: OAI-PMH
+        url: http://journalarticle.ukm.my/cgi/oai2?verb=Identify
+      - type: Registry
+        url: https://opendoar.ac.uk/repository/2122
+common:
+  - type: Website
+    url: https://www.ukm.my/portalukm/
+  - type: LinkedIn
+    url: https://www.linkedin.com/school/universitikebangsaanmalaysia/
+  - type: Plans
+    url: plans/ukm-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/ukm-rate-limits.yml
+  - type: FinOps
+    url: finops/ukm-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
