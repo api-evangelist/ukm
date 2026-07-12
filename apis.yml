@@ -63,6 +63,8 @@ apis:
       - type: Registry
         url: https://opendoar.ac.uk/repository/2122
 common:
+  - type: DomainSecurity
+    url: security/ukm-domain-security.yml
   - type: Website
     url: https://www.ukm.my/portalukm/
   - type: LinkedIn
