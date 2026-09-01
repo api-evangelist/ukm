@@ -1,97 +1,413 @@
 ---
 aid: ukm
 name: Universiti Kebangsaan Malaysia
+x-type: university
+x-category: Public Research University
 description: >-
-  Universiti Kebangsaan Malaysia (UKM), The National University of Malaysia, is
-  a public research university in Bangi, Selangor, ranked #138 in the QS World
-  University Rankings 2025. Its public, machine-readable developer footprint is
-  concentrated in scholarly-communication infrastructure operated by the
-  Perpustakaan Tun Seri Lanang (UKM Library): a DSpace-based UKM Learning and
-  Research Repository and an EPrints-based UKM Journal Article Repository, both
-  of which expose standards-based OAI-PMH harvesting interfaces. UKM does not
-  publish a general-purpose developer portal; student and staff online services
-  are gated behind institutional single sign-on and are not openly documented.
+  Universiti Kebangsaan Malaysia (UKM), The National University of Malaysia, is a public research
+  university in Bangi, Selangor, established 1970, ROR https://ror.org/00bw8d226. It publishes no
+  developer portal, no API documentation, no OpenAPI, no changelog, no status page, no robots.txt,
+  no sitemap.xml and no llms.txt — every one of those returns 404 on www.ukm.my. What it does
+  operate, on its own domain and its own infrastructure, is four unauthenticated machine-readable
+  surfaces that it has never described anywhere.
+
+  The largest is its own identity provider: SSO@UKM at sso.ukm.my is a SimpleSAMLphp SAML 2.0 IdP
+  publishing unauthenticated metadata with signing and encryption keys, SSO and SLO bindings and a
+  technical contact, and it is demonstrably in production — the library's LibQuest service hands an
+  unauthenticated visitor straight to it as SAML SP smuSSO-sp. UKM is nevertheless absent from
+  eduGAIN; a scan of all 10,615 eduGAIN entities on 2026-09-01 found no ukm.my entity while sixteen
+  other Malaysian institutions are registered through SIFULAN.
+
+  The scholarly surfaces are two live OAI-PMH 2.0 endpoints run by Perpustakaan Tun Seri Lanang
+  (the UKM Library): the DSpace 6.3 UKM Learning and Research Repository at ptsldigital.ukm.my with
+  twelve metadata formats, and the OJS 2.4.8.1 UKM e-Journal System at ejournal.ukm.my with five
+  formats and 100 sets — the latter never previously catalogued here. Both platforms are years past
+  end of support. Behind them sits a real identifier footprint: three Crossref memberships owned by
+  UKM units, led by UKM Press with prefix 10.17576 and 16,243 DOIs. A third repository,
+  journalarticle.ukm.my, is registered in OpenDOAR and ROAR but has not answered on port 80 or 443
+  across probes in June and September 2026.
+
+  The fourth surface is incidental rather than intentional: UKM runs its web estate on self-hosted
+  WordPress and leaves the wp/v2 REST API open for unauthenticated reads — 314 routes on the main
+  portal, a second installation on the Berita UKM news site. It is the closest thing the university
+  has to a public read API for its own content, and nothing about it is documented or governed.
+
+  Nothing in this profile is a vendor contract attributed to UKM. Two vendor tenancies are recorded
+  as relationships only — Springshare LibGuides and a RemoteXs e-resources proxy. No course
+  catalog, open data portal, research computing or library discovery API was found; the GEMILANG
+  discovery service did not answer.
 type: Index
 deliveryModel:
-  model: saas
+  model: self-hosted
   open_source: false
-  commercial: true
-  callable_host: false
-  label: Hosted service · you call their endpoint
-  confidence: medium
+  commercial: false
+  callable_host: true
+  label: Institution-operated endpoints · you call their host
+  confidence: high
   source:
-  - pricing
-  generated: '2026-08-28'
-  method: derived
+  - probed
+  generated: '2026-09-01'
+  method: probed
 accessModel:
   pricing: free
-  onboarding: unknown
+  onboarding: none
   trial: false
-  try_now: false
-  public: false
-  label: Free
-  confidence: medium
+  try_now: true
+  public: true
+  label: Free · No signup, no developer portal
+  confidence: high
   source:
-  - plans
-  generated: '2026-07-22'
-  method: derived
+  - probed
+  - authentication
+  generated: '2026-09-01'
+  method: probed
 position: Consumer
-access: 3rd-Party
+access: Public
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/ukm.png
 url: https://raw.githubusercontent.com/api-evangelist/ukm/refs/heads/main/apis.yml
 tags:
-  - Education
-  - Higher Education
   - University
+  - Higher Education
+  - Education
   - Research
-  - Open Access
+  - Malaysia
+  - Southeast Asia
+  - Identity Federation
+  - SAML
+  - Research Repository
   - Institutional Repository
   - OAI-PMH
+  - Open Access
+  - Scholarly Publishing
   - Library
-  - Malaysia
+  - Theses
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-09-01'
+# 2026-06-03: enrichment recorded two OAI-PMH surfaces, one of them on a host that did not answer.
+# 2026-09-01: university pipeline re-profile. No vendor contract had been misattributed to UKM, so
+#   nothing was removed. Operator attribution was settled first, then four institution-operated
+#   surfaces were found and verified by probe — a SAML 2.0 identity provider, a second OAI-PMH
+#   endpoint (the OJS e-Journal System), an open WordPress wp/v2 REST API on two installations, and
+#   the previously known DSpace endpoint, now described. Three Crossref memberships and a ROR
+#   registration were recorded as registry facts, and two vendor tenancies as relationships. The
+#   dead journalarticle.ukm.my pointers were removed; the surface is retained and marked unreachable.
 specificationVersion: '0.23'
 apis:
+  - aid: ukm:identity-federation
+    name: SSO@UKM — SAML 2.0 Identity Provider
+    x-operator: institution
+    description: >-
+      Universiti Kebangsaan Malaysia's own SAML 2.0 identity provider, a SimpleSAMLphp deployment at
+      sso.ukm.my. Publishes unauthenticated SAML 2.0 metadata (application/samlmetadata+xml, 4,261
+      bytes) with an IDPSSODescriptor carrying separate signing and encryption X.509 keys,
+      HTTP-Redirect SingleSignOnService and SingleLogoutService endpoints, the transient NameID
+      format and a technical contact at server@ukm.edu.my. Confirmed in production: libquest.ukm.my
+      redirects unauthenticated visitors to /saml2/idp/SSOService.php as SP smuSSO-sp. Three
+      weaknesses are visible in the metadata itself — entityID is the bare string "sso.ukm.my"
+      rather than a URI, the document is not XML-signed, and no validUntil or cacheDuration tells a
+      relying party when to re-fetch. UKM is not registered in eduGAIN and does not appear under
+      SIFULAN, so no federation operator is checking any of this on its behalf.
+    humanURL: https://sso.ukm.my/
+    baseURL: https://sso.ukm.my/saml2/idp
+    tags:
+      - Identity Federation
+      - SAML
+      - Single Sign-On
+      - Authentication
+    properties:
+      - type: OpenAPI
+        url: openapi/ukm-identity-federation-openapi.yml
+      - type: Metadata
+        url: https://sso.ukm.my/saml2/idp/metadata.php
+      - type: Examples
+        url: examples/ukm-sso-saml-idp-metadata.xml
+      - type: Authentication
+        url: authentication/ukm-authentication.yml
+      - type: Conformance
+        url: conformance/ukm-conformance.yml
+      - type: Lifecycle
+        url: lifecycle/ukm-lifecycle.yml
   - aid: ukm:learning-research-repository-oai
     name: UKM Learning and Research Repository (OAI-PMH)
+    x-operator: institution
     description: >-
-      DSpace-based institutional repository operated by Perpustakaan Tun Seri
-      Lanang (UKM Library) providing access to theses, past-year exam papers,
-      selected government publications and law documents. It exposes a valid
-      OAI-PMH 2.0 metadata-harvesting interface (Identify confirmed live).
+      DSpace 6.3 institutional repository operated by Perpustakaan Tun Seri Lanang (UKM Library) on
+      the university's own host, holding theses, past-year examination papers and selected
+      government and law publications. Its OAI-PMH 2.0 interface is live and unauthenticated:
+      repositoryName "UKM Learning and Research Repository", adminEmail tek_lib@ukm.edu.my,
+      earliestDatestamp 2022-10-03, deletedRecord policy transient, granularity to the second, and
+      twelve metadata formats (uketd_dc, qdc, didl, mods, ore, mets, oai_dc, rdf, marc, xoai, dim,
+      etdms). Two defects a harvester will hit: the OAI repositoryIdentifier is the internal name
+      http://ptsldigitalv2.ukm.my, which does not resolve publicly, and the DSpace REST API is not
+      reachable — /rest redirects to port 8443, which does not answer. robots.txt exists but its
+      two Sitemap directives point at that same non-resolving internal host.
     humanURL: https://ptsldigital.ukm.my/
     baseURL: https://ptsldigital.ukm.my/oai/request
-    tags: [ Institutional Repository, OAI-PMH, DSpace, Open Access, Research, Library ]
+    tags:
+      - OAI-PMH
+      - Institutional Repository
+      - DSpace
+      - Open Access
+      - Research
+      - Library
+      - Theses
     properties:
+      - type: OpenAPI
+        url: openapi/ukm-ptsl-digital-oai-pmh-openapi.yml
       - type: Documentation
         url: https://ptsldigital.ukm.my/
       - type: OAI-PMH
         url: https://ptsldigital.ukm.my/oai/request?verb=Identify
-  - aid: ukm:journal-article-repository-oai
-    name: UKM Journal Article Repository (OAI-PMH)
+      - type: Examples
+        url: examples/ukm-ptsldigital-oai-identify.xml
+      - type: Errors
+        url: errors/ukm-errors.yml
+      - type: Conformance
+        url: conformance/ukm-conformance.yml
+      - type: Lifecycle
+        url: lifecycle/ukm-lifecycle.yml
+      - type: Vocabulary
+        url: vocabulary/ukm-vocabulary.yml
+  - aid: ukm:ejournal-oai
+    name: UKM e-Journal System (OAI-PMH)
+    x-operator: institution
     description: >-
-      EPrints-based repository of journal articles published by UKM
-      faculties, institutes and UKM Press. Registered in ROAR and OpenDOAR as
-      supporting OAI-PMH 2.0 harvesting via its EPrints oai2 interface. (Host
-      intermittently unreachable from automated probes; registry-confirmed.)
-    humanURL: http://journalarticle.ukm.my/
-    baseURL: http://journalarticle.ukm.my/cgi/oai2
-    tags: [ Institutional Repository, OAI-PMH, EPrints, Open Access, Research, Library ]
+      Open Journal Systems 2.4.8.1 platform self-hosted at ejournal.ukm.my (CNAME ejournals.ukm.my),
+      carrying the journals published by UKM faculties, institutes and UKM Press. Its OAI-PMH 2.0
+      interface is live and unauthenticated: repositoryName "UKM e-Journal System", adminEmail
+      nurhafizah@ukm.edu.my, repositoryIdentifier ojs.ukm.my, earliestDatestamp 2012-02-19,
+      deletedRecord policy persistent, gzip and deflate compression advertised, five metadata
+      formats (oai_dc, oai_marc, marcxml, nlm, rfc1807) and 100 sets. This surface was not in UKM's
+      profile before 2026-09-01. It is the publishing counterpart of the university's Crossref
+      membership — UKM Press mints 10.17576 DOIs against the articles it exposes. OJS 2.4.8.1
+      predates the PKP REST API, so OAI-PMH is the only machine-readable interface it offers;
+      /api/v1/contexts returns 404.
+    humanURL: https://ejournal.ukm.my/
+    baseURL: https://ejournal.ukm.my/index.php/index/oai
+    tags:
+      - OAI-PMH
+      - Scholarly Publishing
+      - Open Journal Systems
+      - Open Access
+      - Research
+      - Library
     properties:
+      - type: OpenAPI
+        url: openapi/ukm-ejournal-oai-pmh-openapi.yml
       - type: Documentation
-        url: http://journalarticle.ukm.my/eprints/
+        url: https://ejournal.ukm.my/
       - type: OAI-PMH
-        url: http://journalarticle.ukm.my/cgi/oai2?verb=Identify
+        url: https://ejournal.ukm.my/index.php/index/oai?verb=Identify
+      - type: Examples
+        url: examples/ukm-ejournal-oai-identify.xml
+      - type: Errors
+        url: errors/ukm-errors.yml
+      - type: Conformance
+        url: conformance/ukm-conformance.yml
+      - type: Lifecycle
+        url: lifecycle/ukm-lifecycle.yml
+  - aid: ukm:web-content-rest
+    name: UKM Web Content REST API (WordPress wp/v2)
+    x-operator: institution
+    description: >-
+      UKM runs its web estate on self-hosted WordPress and leaves the wp/v2 REST API open for
+      unauthenticated reads on its own domain. Two installations were verified live: the main
+      portal at www.ukm.my/portal (discovery document 307 KB, 314 routes, 18 namespaces,
+      authentication []) and the Berita UKM news site at www.ukm.my/beritaukm (225 KB). GET
+      /wp/v2/pages, /wp/v2/media and /wp/v2/search all answer with JSON; /wp/v2/posts returns an
+      empty array on the portal because the portal is built entirely from pages. The contract is
+      WordPress's stock route set, not something UKM designed — the deployment is what is credited
+      here. It is undocumented, ungoverned, carries no rate-limit header and no terms for automated
+      access, and most of its eighteen namespaces are plugin-owned, so routes can appear or vanish
+      on a plugin update. The host is intermittently slow: three of eleven probes on 2026-09-01
+      timed out at 25-60 seconds.
+    humanURL: https://www.ukm.my/portal/
+    baseURL: https://www.ukm.my/portal/wp-json
+    tags:
+      - Content
+      - WordPress
+      - Web Content Management
+      - News
+    properties:
+      - type: OpenAPI
+        url: openapi/ukm-web-content-rest-openapi.yml
+      - type: APIReference
+        url: https://www.ukm.my/portal/wp-json/
+      - type: JSONSchema
+        url: json-schema/ukm-wordpress-page-schema.json
+      - type: Examples
+        url: examples/ukm-portal-wp-json-root.json
+      - type: Examples
+        url: examples/ukm-portal-wp-page.json
+      - type: Errors
+        url: errors/ukm-errors.yml
+      - type: Lifecycle
+        url: lifecycle/ukm-lifecycle.yml
+  - aid: ukm:journal-article-repository-oai
+    name: UKM Journal Article Repository (OAI-PMH) — unreachable
+    x-operator: institution
+    x-status: unreachable
+    description: >-
+      EPrints repository of journal articles published by UKM faculties, institutes and UKM Press,
+      registered in OpenDOAR (record 2122) and ROAR as supporting OAI-PMH 2.0 via its EPrints oai2
+      interface. The entry is retained because the repository is a real institutional fact and the
+      registry record is live, but the host is not: journalarticle.ukm.my resolves to
+      103.219.237.180 while TCP connections to both port 80 and port 443 time out. That was true on
+      2026-06-03 and it was still true on 2026-09-01. Its dead pointers have been removed from this
+      profile. UKM has published no notice of an outage or a decommission, and the OpenDOAR record
+      still describes the repository as active.
+    humanURL: https://opendoar.ac.uk/repository/2122
+    baseURL: http://journalarticle.ukm.my/cgi/oai2
+    tags:
+      - OAI-PMH
+      - Institutional Repository
+      - EPrints
+      - Open Access
+      - Research
+    properties:
       - type: Registry
         url: https://opendoar.ac.uk/repository/2122
+      - type: Lifecycle
+        url: lifecycle/ukm-lifecycle.yml
+  - aid: ukm:crossref-membership
+    name: Crossref DOI Registration (UKM Press and UKM faculties)
+    x-operator: registry
+    description: >-
+      Three Crossref memberships are held by units of Universiti Kebangsaan Malaysia, together
+      accounting for 16,447 registered DOIs: member 7332, Penerbit Universiti Kebangsaan Malaysia
+      (UKM Press), prefix 10.17576, 16,243 DOIs, Bangi; member 8124, Faculty of Medicine,
+      Universiti Kebangsaan Malaysia, prefix 10.17845, 30 DOIs, Cheras; member 11019, Research
+      Centre for Sharia, Faculty of Islamic Studies, prefix 10.26475, 174 DOIs. This is a
+      membership, not a contract — the API is Crossref's and is scored against Crossref's own repo.
+      The registrant identity and the three prefixes are UKM's, and they resolve against the
+      articles served by the UKM e-Journal System OAI-PMH endpoint above. No DataCite provider or
+      repository client exists for UKM.
+    humanURL: https://www.crossref.org/
+    baseURL: https://api.crossref.org
+    tags:
+      - Crossref
+      - DOI
+      - Persistent Identifiers
+      - Scholarly Publishing
+      - Registry
+    properties:
+      - type: Registry
+        url: https://api.crossref.org/members/7332
+        name: Penerbit Universiti Kebangsaan Malaysia (UKM Press) — prefix 10.17576, 16,243 DOIs
+      - type: Registry
+        url: https://api.crossref.org/members/8124
+        name: Faculty of Medicine, Universiti Kebangsaan Malaysia — prefix 10.17845
+      - type: Registry
+        url: https://api.crossref.org/members/11019
+        name: Research Centre for Sharia, Faculty of Islamic Studies, UKM — prefix 10.26475
+      - type: Conformance
+        url: conformance/ukm-conformance.yml
+  - aid: ukm:ror-registration
+    name: ROR Organization Registration
+    x-operator: registry
+    description: >-
+      Universiti Kebangsaan Malaysia is registered in the Research Organization Registry as
+      https://ror.org/00bw8d226, created 2018-11-14 and last modified 2026-07-20. The record
+      declares both of the institution's registrable domains — ukm.edu.my and ukm.my — established
+      1970, and the alternate names NUM, UKM and National University of Malaysia. It carries
+      external identifiers linking the institution to FundRef and other schemes. A separate ROR
+      record, https://ror.org/01590nj79, covers Hospital Universiti Kebangsaan Malaysia. This is a
+      registry membership; the API is ROR's.
+    humanURL: https://ror.org/00bw8d226
+    baseURL: https://api.ror.org
+    tags:
+      - ROR
+      - Persistent Identifiers
+      - Registry
+      - Research
+    properties:
+      - type: Registry
+        url: https://api.ror.org/v2/organizations/https://ror.org/00bw8d226
+        name: ROR record for Universiti Kebangsaan Malaysia
+  - aid: ukm:libguides-tenant
+    name: Springshare LibGuides (tenant deployment)
+    x-operator: tenant
+    x-vendor: Springshare
+    x-vendor-product: LibGuides
+    description: >-
+      Perpustakaan Tun Seri Lanang runs its research and subject guides on a Springshare LibGuides
+      tenant at ukm.libguides.com — an institution-specific subdomain on a vendor platform. The
+      guides, the content and the tenancy are UKM's; the platform, the LibGuides API and its
+      contract are Springshare's, and the contract is deliberately not saved here. Recorded as a
+      relationship. Verified live 2026-09-01.
+    humanURL: https://ukm.libguides.com/
+    baseURL: https://ukm.libguides.com
+    tags:
+      - Library
+      - Tenant
+      - Vendor Platform
+      - LibGuides
+    properties:
+      - type: Documentation
+        url: https://ukm.libguides.com/
+  - aid: ukm:remotexs-tenant
+    name: RemoteXs E-Resources Proxy (tenant deployment)
+    x-operator: tenant
+    x-vendor: RemoteXs
+    x-vendor-product: RemoteXs
+    description: >-
+      UKM Library's off-campus access to licensed e-resources runs on a RemoteXs tenant at
+      eresourcesptsl.ukm.remotexs.co — a vendor host carrying a UKM-specific account. The
+      entitlement and the user population are UKM's; the platform and its contract are RemoteXs's
+      and are not saved here. Recorded as a relationship. Verified live 2026-09-01.
+    humanURL: https://eresourcesptsl.ukm.remotexs.co/
+    baseURL: https://eresourcesptsl.ukm.remotexs.co
+    tags:
+      - Library
+      - Tenant
+      - Vendor Platform
+      - E-Resources
+    properties:
+      - type: Documentation
+        url: https://eresourcesptsl.ukm.remotexs.co/
 common:
-  - type: DomainSecurity
-    url: security/ukm-domain-security.yml
   - type: Website
-    url: https://www.ukm.my/portalukm/
+    url: https://www.ukm.my/portal/
+  - type: Blog
+    url: https://www.ukm.my/beritaukm/
+    name: Berita UKM — the university news site, a second self-hosted WordPress installation
+  - type: BlogRSS
+    url: https://www.ukm.my/beritaukm/feed/
+  - type: APIReference
+    url: https://www.ukm.my/portal/wp-json/
+    name: >-
+      WordPress wp/v2 route index — the only self-describing document UKM serves. It is not
+      documentation the university wrote.
+  - type: IdentityFederation
+    url: https://sso.ukm.my/saml2/idp/metadata.php
+    name: SSO@UKM SAML 2.0 identity provider metadata (self-published; not in eduGAIN)
+  - type: ResearchRepository
+    url: https://ptsldigital.ukm.my/
+    name: UKM Learning and Research Repository — self-hosted DSpace 6.3
+  - type: ResearchRepository
+    url: https://ejournal.ukm.my/
+    name: UKM e-Journal System — self-hosted Open Journal Systems 2.4.8.1
+  - type: LibraryCatalog
+    url: https://www.ukm.my/ptsl/
+    name: >-
+      Perpustakaan Tun Seri Lanang — the library's web presence. No catalog or discovery API was
+      found. The GEMILANG discovery service at gemilang.ukm.my did not answer on 2026-09-01.
   - type: LinkedIn
     url: https://www.linkedin.com/school/universitikebangsaanmalaysia/
+  - type: Authentication
+    url: authentication/ukm-authentication.yml
+  - type: Conformance
+    url: conformance/ukm-conformance.yml
+  - type: Errors
+    url: errors/ukm-errors.yml
+  - type: Lifecycle
+    url: lifecycle/ukm-lifecycle.yml
+  - type: Vocabulary
+    url: vocabulary/ukm-vocabulary.yml
+  - type: JSONLD
+    url: json-ld/ukm-context.jsonld
+  - type: DomainSecurity
+    url: security/ukm-domain-security.yml
   - type: Plans
     url: plans/ukm-plans-pricing.yml
   - type: RateLimits
@@ -100,6 +416,154 @@ common:
     url: finops/ukm-finops.yml
   - type: Review
     url: review.yml
+x-coverage:
+  state: covered
+  reason: covered
+  detail: >-
+    Four institution-operated, machine-readable surfaces were found, probed and described, three of
+    them for the first time: a SAML 2.0 identity provider at sso.ukm.my, an OAI-PMH 2.0 endpoint on
+    the OJS e-Journal System, and an open WordPress wp/v2 REST API on two installations, alongside
+    the already-known DSpace OAI-PMH endpoint, which is now described rather than merely listed.
+    Three Crossref memberships (16,447 DOIs) and a ROR registration are recorded as registry facts.
+    Two vendor tenancies — Springshare LibGuides and a RemoteXs e-resources proxy — are recorded as
+    relationships, with no vendor contract saved. No vendor contract had previously been
+    misattributed to UKM, so nothing had to be removed on that account.
+
+    What UKM does not publish is as much of the finding. There is no developer portal, no API
+    documentation, no OpenAPI, no changelog, no status page, no terms for automated access, no
+    robots.txt, no sitemap.xml, no llms.txt and no .well-known/security.txt — all 404 on
+    www.ukm.my. No course catalog, timetable, registrar, open data portal or research computing
+    surface exists publicly; the library's GEMILANG discovery service did not answer; erep.ukm.my
+    and libquest.ukm.my are behind SSO. A search of the portal in Malay and English found no AI
+    policy or responsible-AI statement. Both scholarly platforms are years past end of support
+    (DSpace 6.3, OJS 2.4.8.1), and a third repository, journalarticle.ukm.my, has been unreachable
+    since at least June 2026 while its OpenDOAR record still calls it active — its dead pointers
+    were removed here.
+
+    Every OpenAPI in this repo was written by API Evangelist from live probes and is marked
+    method: probed. UKM publishes none of its own.
+  generated: '2026-09-01'
+  method: probed
+  evidence:
+    - url: https://sso.ukm.my/saml2/idp/metadata.php
+      status: 200
+      note: >-
+        application/samlmetadata+xml, 4261 bytes, entityID "sso.ukm.my", IDPSSODescriptor with
+        signing and encryption keys, HTTP-Redirect SSO and SLO, transient NameID, contact
+        server@ukm.edu.my
+    - url: https://libquest.ukm.my/
+      status: 200
+      note: >-
+        redirects to https://sso.ukm.my/saml2/idp/SSOService.php with
+        spentityid=https://libquest.ukm.my/simplesaml/module.php/saml/sp/metadata.php/smuSSO-sp —
+        the IdP is in production
+    - url: https://technical.edugain.org/api.php?action=list_entities&format=json
+      status: 200
+      note: >-
+        10,615 entities scanned; no ukm.my / ukm.edu.my entity, scope or display name. Sixteen
+        Malaysian institutions are registered via SIFULAN. UKM is not inter-federated.
+    - url: https://ptsldigital.ukm.my/oai/request?verb=Identify
+      status: 200
+      note: 'OAI-PMH 2.0, DSpace 6.3, adminEmail tek_lib@ukm.edu.my, earliestDatestamp 2022-10-03'
+    - url: https://ptsldigital.ukm.my/oai/request?verb=ListMetadataFormats
+      status: 200
+      note: 12 formats — uketd_dc, qdc, didl, mods, ore, mets, oai_dc, rdf, marc, xoai, dim, etdms
+    - url: https://ptsldigital.ukm.my/oai/request?verb=Bogus
+      status: 200
+      note: badVerb error returned with HTTP 200, per the OAI-PMH error profile
+    - url: https://ptsldigital.ukm.my/rest/communities
+      status: 0
+      note: 302 to ptsldigital.ukm.my:8443, which times out — the DSpace REST API is not public
+    - url: https://ptsldigital.ukm.my/robots.txt
+      status: 200
+      note: >-
+        both Sitemap directives point at http://ptsldigitalv2.ukm.my:8080/jspui, a host that does
+        not resolve publicly
+    - url: https://ejournal.ukm.my/index.php/index/oai?verb=Identify
+      status: 200
+      note: 'OAI-PMH 2.0, OJS 2.4.8.1, repositoryIdentifier ojs.ukm.my, earliestDatestamp 2012-02-19'
+    - url: https://ejournal.ukm.my/index.php/index/oai?verb=ListSets
+      status: 200
+      note: 100 sets
+    - url: https://ejournal.ukm.my/index.php/index/api/v1/contexts
+      status: 404
+      note: no PKP REST API — OJS 2.x predates it
+    - url: https://www.ukm.my/portal/wp-json/
+      status: 200
+      note: >-
+        307 KB, 314 routes, 18 namespaces, authentication reported as an empty array
+    - url: https://www.ukm.my/portal/wp-json/wp/v2/pages?per_page=1
+      status: 200
+      note: 63 KB JSON page record; field set is stock WordPress
+    - url: https://www.ukm.my/portal/wp-json/wp/v2/posts?per_page=1
+      status: 200
+      note: empty array — the portal carries no posts
+    - url: https://www.ukm.my/beritaukm/wp-json/
+      status: 200
+      note: 225 KB — a second WordPress REST API on the news site
+    - url: https://www.ukm.my/beritaukm/feed/
+      status: 200
+      note: 68 KB RSS; intermittent — one of three attempts timed out at 60s
+    - url: https://www.ukm.my/portal/
+      status: 200
+      note: >-
+        the previously recorded Website pointer https://www.ukm.my/portalukm/ 301s here; corrected
+    - url: https://www.ukm.my/robots.txt
+      status: 404
+    - url: https://www.ukm.my/sitemap.xml
+      status: 404
+    - url: https://www.ukm.my/llms.txt
+      status: 404
+    - url: https://www.ukm.my/.well-known/security.txt
+      status: 404
+    - url: https://sso.ukm.my/.well-known/openid-configuration
+      status: 404
+      note: SAML only; no OpenID Connect
+    - url: https://api.crossref.org/members?query=Universiti+Kebangsaan+Malaysia
+      status: 200
+      note: 'members 7332 (10.17576, 16,243 DOIs), 8124 (10.17845), 11019 (10.26475)'
+    - url: https://api.ror.org/v2/organizations?query=Universiti+Kebangsaan+Malaysia
+      status: 200
+      note: 'https://ror.org/00bw8d226, domains ukm.edu.my + ukm.my, established 1970'
+    - url: https://api.datacite.org/providers?query=Kebangsaan
+      status: 200
+      note: 'meta.total = 0 — no DataCite membership'
+    - url: https://api.datacite.org/clients?query=ukm.my
+      status: 200
+      note: 'meta.total = 0'
+    - url: http://journalarticle.ukm.my/cgi/oai2?verb=Identify
+      status: 0
+      note: >-
+        DNS resolves to 103.219.237.180; TCP times out on port 80 and port 443. Also status 0 on
+        2026-06-03. Dead pointers removed.
+    - url: https://opendoar.ac.uk/repository/2122
+      status: 200
+      note: OpenDOAR record still describes the UKM Journal Article Repository as active
+    - url: https://ukm.libguides.com/
+      status: 200
+      note: Springshare LibGuides tenant — relationship recorded, contract not saved
+    - url: https://eresourcesptsl.ukm.remotexs.co/
+      status: 200
+      note: RemoteXs e-resources proxy tenant — relationship recorded, contract not saved
+    - url: https://gemilang.ukm.my/
+      status: 0
+      note: library discovery service did not answer; no catalog API pointer emitted
+    - url: https://erep.ukm.my/
+      status: 200
+      note: >-
+        eRePv2, UKM's own research-report system; authenticated via appsmu.ukm.my, no public
+        interface
+    - url: https://www.ukm.my/ptsl/
+      status: 200
+      note: Perpustakaan Tun Seri Lanang web presence; no catalog or discovery API found
+    - url: https://www.ukm.my/portal/wp-json/wp/v2/search?search=artificial+intelligence
+      status: 200
+      note: >-
+        searched the portal in English and Malay ("kecerdasan buatan", "polisi"); only postgraduate
+        programme pages returned. No AI policy or responsible-AI statement found.
+    - url: https://www.linkedin.com/school/universitikebangsaanmalaysia/
+      status: 999
+      note: LinkedIn bot challenge — live, machine-unreadable
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
