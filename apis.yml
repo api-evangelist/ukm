@@ -61,7 +61,7 @@ accessModel:
   - authentication
   generated: '2026-09-01'
   method: probed
-position: Consumer
+position: Consuming
 access: Public
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/ukm.png
 url: https://raw.githubusercontent.com/api-evangelist/ukm/refs/heads/main/apis.yml
