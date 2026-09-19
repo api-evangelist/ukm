@@ -185,6 +185,11 @@ apis:
   baseURL: https://ukm.libguides.com
   tags:
   - Library
+  - Tenants
+  - Vendor Platform
+  - LibGuides
+  tags_raw:
+  - Library
   - Tenant
   - Vendor Platform
   - LibGuides
@@ -204,6 +209,11 @@ apis:
   humanURL: https://eresourcesptsl.ukm.remotexs.co/
   baseURL: https://eresourcesptsl.ukm.remotexs.co
   tags:
+  - Library
+  - Tenants
+  - Vendor Platform
+  - E-Resources
+  tags_raw:
   - Library
   - Tenant
   - Vendor Platform
@@ -393,6 +403,8 @@ apis:
   humanURL: https://sso.ukm.my/
   baseURL: https://sso.ukm.my/saml2/idp
   tags:
+  - SSO
+  tags_raw:
   - Single Sign-On
   properties:
   - type: OpenAPI
