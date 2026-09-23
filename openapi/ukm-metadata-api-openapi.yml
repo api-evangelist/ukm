@@ -1,0 +1,43 @@
+openapi: 3.2.0
+info:
+  title: UKM Identity Provider — SAML 2.0 (SSO@UKM) Metadata API
+  version: '2.0'
+  summary: Universiti Kebangsaan Malaysia's own SAML 2.0 identity provider and its published metadata.
+  description: SSO@UKM is Universiti Kebangsaan Malaysia's institution-operated SAML 2.0 identity provider, a SimpleSAMLphp deployment on the university's own domain at sso.ukm.my.
+  contact:
+    name: SSO@UKM administrator
+    email: server@ukm.edu.my
+    url: https://sso.ukm.my/
+  x-operator: institution
+  x-institution: Universiti Kebangsaan Malaysia
+  x-software: SimpleSAMLphp
+  x-provenance:
+    generated: '2026-09-01'
+    method: probed
+    source: https://sso.ukm.my/saml2/idp/metadata.php
+servers:
+- url: https://sso.ukm.my/saml2/idp
+  description: SSO@UKM SAML 2.0 identity provider
+tags:
+- name: Metadata
+  description: SAML 2.0 metadata publication.
+paths:
+  /metadata.php:
+    get:
+      operationId: getSamlMetadata
+      tags:
+      - Metadata
+      summary: SAML 2.0 IdP metadata document
+      description: Returns the identity provider's SAML 2.0 EntityDescriptor. Unauthenticated, no parameters. The document is NOT XML-signed — consumers cannot verify its authenticity from the document alone and must rely on TLS.
+      responses:
+        '200':
+          description: SAML 2.0 metadata.
+          content:
+            application/samlmetadata+xml:
+              schema:
+                type: string
+                contentMediaType: application/samlmetadata+xml
+              examples:
+                metadata:
+                  summary: IdP metadata captured 2026-09-01 (certificates elided in the saved copy)
+                  externalValue: ../examples/ukm-sso-saml-idp-metadata.xml

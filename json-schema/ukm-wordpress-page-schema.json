@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/ukm/refs/heads/main/json-schema/ukm-wordpress-page-schema.json",
+  "title": "UKM Web Content — WordPress page record",
+  "description": "Record model returned by GET /wp/v2/pages on the Universiti Kebangsaan Malaysia portal at https://www.ukm.my/portal/wp-json. Derived by API Evangelist from a live response captured 2026-09-01. The field set is stock WordPress — no UKM-local fields were observed. UKM publishes no schema of its own.",
+  "x-provenance": {
+    "generated": "2026-09-01",
+    "method": "probed",
+    "source": "https://www.ukm.my/portal/wp-json/wp/v2/pages?per_page=1"
+  },
+  "x-operator": "institution",
+  "type": "object",
+  "required": ["id", "slug", "status", "type", "link", "title"],
+  "properties": {
+    "id": { "type": "integer", "description": "WordPress post ID." },
+    "date": { "type": "string", "description": "Publication date in site local time (Asia/Kuala_Lumpur, GMT+8)." },
+    "date_gmt": { "type": "string", "description": "Publication date in GMT." },
+    "guid": { "$ref": "#/$defs/rendered" },
+    "modified": { "type": "string" },
+    "modified_gmt": { "type": "string" },
+    "slug": { "type": "string" },
+    "status": { "type": "string", "enum": ["publish", "future", "draft", "pending", "private"] },
+    "type": { "type": "string" },
+    "link": { "type": "string", "format": "uri" },
+    "title": { "$ref": "#/$defs/rendered" },
+    "content": { "$ref": "#/$defs/rendered" },
+    "excerpt": { "$ref": "#/$defs/rendered" },
+    "author": { "type": "integer" },
+    "featured_media": { "type": "integer" },
+    "parent": { "type": "integer" },
+    "menu_order": { "type": "integer" },
+    "comment_status": { "type": "string", "enum": ["open", "closed"] },
+    "ping_status": { "type": "string", "enum": ["open", "closed"] },
+    "template": { "type": "string" },
+    "meta": {},
+    "class_list": { "type": "array", "items": { "type": "string" } },
+    "_links": { "type": "object", "description": "HAL-style link relations, including wp:attachment and wp:featuredmedia." }
+  },
+  "$defs": {
+    "rendered": {
+      "type": "object",
+      "properties": {
+        "rendered": { "type": "string", "description": "HTML as rendered by the theme." },
+        "protected": { "type": "boolean" }
+      }
+    }
+  }
+}

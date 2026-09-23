@@ -1,0 +1,40 @@
+{
+  "provider": "ukm",
+  "sources": [
+    "_original/ukm-ejournal-oai-pmh-openapi.yml",
+    "_original/ukm-identity-federation-openapi.yml",
+    "_original/ukm-ptsl-digital-oai-pmh-openapi.yml",
+    "_original/ukm-web-content-rest-openapi.yml"
+  ],
+  "outputs": [
+    "ukm-oai-pmh-api-openapi.yml",
+    "ukm-metadata-api-openapi.yml",
+    "ukm-single-sign-on-api-openapi.yml",
+    "ukm-content-api-openapi.yml",
+    "ukm-discovery-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "4 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (4 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "ukm-ejournal-oai-pmh-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "ukm-identity-federation-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "ukm-ptsl-digital-oai-pmh-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "ukm-web-content-rest-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "tag 'OAI-PMH' spans 2 source specs (ukm-ejournal-oai-pmh-openapi.yml, ukm-ptsl-digital-oai-pmh-openapi.yml): per-path servers applied",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/ukm-web-content-rest-openapi_2.yml: archived document superseded by a larger archived document",
+    "_original/ukm-ptsl-digital-oai-pmh-openapi_2.yml: archived document superseded by a larger archived document",
+    "_original/ukm-identity-federation-openapi_2.yml: archived document superseded by a larger archived document",
+    "_original/ukm-ejournal-oai-pmh-openapi_2.yml: archived document superseded by a larger archived document",
+    "ukm-content-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ukm-discovery-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ukm-metadata-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ukm-oai-pmh-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "ukm-single-sign-on-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}

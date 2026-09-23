@@ -1,0 +1,114 @@
+# x-archived-from: ukm-ejournal-oai-pmh-openapi.yml
+# x-archived-on: 2026-09-16
+# generated: '2026-09-01'
+# method: probed
+# source: live probes of https://ejournal.ukm.my/index.php/index/oai (Identify,
+#   ListMetadataFormats, ListSets and a badVerb error response), 2026-09-01.
+# x-operator: institution
+# NOTE: UKM publishes no OpenAPI for this endpoint. This is the pristine pre-refine copy.
+openapi: 3.1.0
+info:
+  title: UKM e-Journal System — OAI-PMH 2.0
+  version: '2.0'
+  summary: OAI-PMH metadata harvesting interface for UKM's Open Journal Systems journal platform.
+  description: >-
+    Institution-operated OAI-PMH 2.0 harvesting interface for the UKM e-Journal System, an Open
+    Journal Systems 2.4.8.1 installation self-hosted by Universiti Kebangsaan Malaysia on its own
+    domain, ejournal.ukm.my (CNAME ejournals.ukm.my). Repository name "UKM e-Journal System",
+    adminEmail nurhafizah@ukm.edu.my, repositoryIdentifier ojs.ukm.my, earliestDatestamp
+    2012-02-19T15:55:15Z, deletedRecord policy "persistent", granularity to the second, gzip and
+    deflate compression advertised. Five metadata formats are offered: oai_dc, oai_marc, marcxml,
+    nlm, rfc1807. ListSets returns 100 sets — one per journal and journal section carried by the
+    platform. No authentication.
+
+    This surface was not in UKM's profile before 2026-09-01. It is the publishing counterpart of
+    the university's Crossref membership: UKM Press (Crossref member 7332, prefix 10.17576) mints
+    DOIs for the articles this endpoint exposes.
+
+    OJS 2.4.8.1 predates the PKP REST API, which arrived in OJS 3.x — /api/v1/contexts returns 404
+    on this deployment, so OAI-PMH is the only machine-readable interface it offers. This
+    description was written by API Evangelist from live probes on 2026-09-01; UKM publishes no
+    OpenAPI of its own.
+  contact:
+    name: UKM e-Journal System
+    email: nurhafizah@ukm.edu.my
+    url: https://ejournal.ukm.my/
+  x-operator: institution
+  x-institution: Universiti Kebangsaan Malaysia
+  x-software: Open Journal Systems 2.4.8.1 (Public Knowledge Project)
+  x-provenance:
+    generated: '2026-09-01'
+    method: probed
+    source: https://ejournal.ukm.my/index.php/index/oai?verb=Identify
+servers:
+  - url: https://ejournal.ukm.my/index.php/index
+    description: Site-wide OAI-PMH endpoint (all journals)
+tags:
+  - name: OAI-PMH
+    description: Open Archives Initiative Protocol for Metadata Harvesting, version 2.0.
+paths:
+  /oai:
+    get:
+      operationId: ejournalOaiRequest
+      tags: [ OAI-PMH ]
+      summary: OAI-PMH 2.0 request endpoint
+      description: >-
+        Single OAI-PMH endpoint for every journal on the platform. The `verb` parameter selects the
+        operation. Protocol errors are returned inside an XML `<error>` element with HTTP status 200.
+        A single journal can be harvested with `set`, or by substituting the journal path for
+        `index` in the base URL.
+      parameters:
+        - name: verb
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, GetRecord ]
+        - name: metadataPrefix
+          in: query
+          required: false
+          description: Metadata format. Required for ListIdentifiers, ListRecords and GetRecord.
+          schema:
+            type: string
+            enum: [ oai_dc, oai_marc, marcxml, nlm, rfc1807 ]
+        - name: identifier
+          in: query
+          required: false
+          description: OAI identifier of a single record. Required for GetRecord.
+          schema:
+            type: string
+          example: 'oai:ojs.ukm.my:article/1'
+        - name: set
+          in: query
+          required: false
+          description: Set spec restricting the harvest to one journal or journal section.
+          schema:
+            type: string
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: until
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: resumptionToken
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            OAI-PMH XML response. Protocol errors also return 200 with an `<error>` element.
+          content:
+            text/xml:
+              schema:
+                type: string
+                contentMediaType: text/xml
+              examples:
+                identify:
+                  summary: Identify response (captured 2026-09-01)
+                  externalValue: ../examples/ukm-ejournal-oai-identify.xml

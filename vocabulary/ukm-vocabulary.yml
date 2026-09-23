@@ -1,0 +1,74 @@
+---
+name: Universiti Kebangsaan Malaysia — vocabulary
+description: >-
+  Terms a consumer needs to read UKM's surfaces, including the Malay-language names the university
+  uses for its own systems. Assembled by API Evangelist from live probes on 2026-09-01. UKM
+  publishes no glossary.
+generated: '2026-09-01'
+method: probed
+source: live probes of ukm.my hosts
+terms:
+  - term: UKM
+    definition: >-
+      Universiti Kebangsaan Malaysia, The National University of Malaysia. Also appears as NUM and
+      "National University of Malaysia" in ROR. Established 1970. ROR https://ror.org/00bw8d226,
+      registrable domains ukm.my and ukm.edu.my — both are the institution's, and hosts appear under
+      each.
+  - term: Perpustakaan Tun Seri Lanang (PTSL)
+    definition: >-
+      The UKM Library. Operator of the repository, e-journal and discovery surfaces. Web presence at
+      https://www.ukm.my/ptsl/. Technical contact for the DSpace repository is tek_lib@ukm.edu.my.
+  - term: ptsldigital
+    definition: >-
+      The UKM Learning and Research Repository, PTSL's DSpace 6.3 instance at ptsldigital.ukm.my.
+      Its OAI repositoryIdentifier is the internal name http://ptsldigitalv2.ukm.my, which does not
+      resolve publicly — a harvester constructing URLs from OAI identifiers will fail.
+  - term: Penerbit UKM / UKM Press
+    definition: >-
+      The university press. Crossref member 7332 with DOI prefix 10.17576 and 16,243 registered
+      DOIs — the largest scholarly identifier footprint UKM has.
+  - term: e-Journal / ejournal.ukm.my
+    definition: >-
+      The UKM e-Journal System, an OJS 2.4.8.1 platform carrying UKM's journals. CNAMEs to
+      ejournals.ukm.my. OAI repositoryIdentifier ojs.ukm.my.
+  - term: Berita UKM
+    definition: >-
+      "UKM News" — the university news site at https://www.ukm.my/beritaukm/, a separate WordPress
+      installation from the main portal, publishing in Malay and English with an RSS feed.
+  - term: SSO@UKM
+    definition: >-
+      The university's SimpleSAMLphp SAML 2.0 identity provider at sso.ukm.my, entityID
+      "sso.ukm.my". Fronts library and staff services.
+  - term: GEMILANG
+    definition: >-
+      PTSL's library discovery service at gemilang.ukm.my (with gemilangclassic.ukm.my as a legacy
+      interface). Both were unreachable from automated probes on 2026-09-01.
+  - term: LibQuest
+    definition: >-
+      libquest.ukm.my — a PTSL service behind SSO@UKM. Useful chiefly as proof that the IdP is in
+      production: it advertises itself as SAML SP smuSSO-sp.
+  - term: eRePv2
+    definition: >-
+      erep.ukm.my — UKM's own research-report system, backed by the appsmu.ukm.my application
+      platform and the smk.ukm.my publication system. Authenticated; no public interface.
+  - term: SIFULAN
+    definition: >-
+      The SIFULAN Malaysian Access Federation, Malaysia's national identity federation and the
+      route by which sixteen Malaysian institutions appear in eduGAIN. UKM is not among them.
+  - term: verb
+    definition: >-
+      The OAI-PMH request parameter that selects the operation. Both UKM endpoints implement all
+      six: Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, GetRecord.
+  - term: metadataPrefix
+    definition: >-
+      The requested metadata format. ptsldigital offers twelve (uketd_dc, qdc, didl, mods, ore,
+      mets, oai_dc, rdf, marc, xoai, dim, etdms); ejournal offers five (oai_dc, oai_marc, marcxml,
+      nlm, rfc1807). Only oai_dc is common to both, and it is the only one a harvester can assume.
+  - term: uketd_dc
+    definition: >-
+      UK Electronic Theses and Dissertations Dublin Core — a thesis-specific metadata profile.
+      Its presence on ptsldigital signals that theses are the repository's principal content.
+  - term: resumptionToken
+    definition: >-
+      OAI-PMH flow-control token for paging through an incomplete list response. Neither UKM
+      endpoint documents its expiry.

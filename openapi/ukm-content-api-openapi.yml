@@ -1,0 +1,272 @@
+openapi: 3.2.0
+info:
+  title: UKM Web REST API (WordPress wp/v2) Content API
+  version: wp/v2
+  summary: Unauthenticated read access to Universiti Kebangsaan Malaysia's own website content.
+  description: Universiti Kebangsaan Malaysia runs its main web estate on self-hosted WordPress and leaves the WordPress REST API open for unauthenticated reads on its own domain.
+  contact:
+    name: Universiti Kebangsaan Malaysia
+    url: https://www.ukm.my/portal/
+  x-operator: institution
+  x-institution: Universiti Kebangsaan Malaysia
+  x-software: WordPress (REST API wp/v2)
+  x-provenance:
+    generated: '2026-09-01'
+    method: probed
+    source: https://www.ukm.my/portal/wp-json/
+servers:
+- url: https://www.ukm.my/portal/wp-json
+  description: UKM main portal (www.ukm.my/portal)
+- url: https://www.ukm.my/beritaukm/wp-json
+  description: Berita UKM news site
+tags:
+- name: Content
+  description: Pages, posts and media.
+paths:
+  /wp/v2/pages:
+    get:
+      operationId: listPages
+      tags:
+      - Content
+      summary: List published pages
+      description: Returns published pages as JSON. Verified live on the portal install 2026-09-01 (63 KB for a single page record). Pagination is by `page` and `per_page`; total counts are returned in the X-WP-Total and X-WP-TotalPages response headers.
+      parameters:
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: parent
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - title
+          - menu_order
+      responses:
+        '200':
+          description: Array of page objects.
+          headers:
+            X-WP-Total:
+              description: Total number of matching records.
+              schema:
+                type: integer
+            X-WP-TotalPages:
+              description: Total number of pages of results.
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
+              examples:
+                page:
+                  summary: One page record captured 2026-09-01 (rendered HTML elided)
+                  externalValue: ../examples/ukm-portal-wp-page.json
+        '400':
+          $ref: '#/components/responses/RestError'
+  /wp/v2/pages/{id}:
+    get:
+      operationId: getPage
+      tags:
+      - Content
+      summary: Retrieve one page
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Page object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '404':
+          $ref: '#/components/responses/RestError'
+  /wp/v2/posts:
+    get:
+      operationId: listPosts
+      tags:
+      - Content
+      summary: List published posts
+      description: Returns published posts. On the portal install this returns an empty array — the portal carries no posts. The Berita UKM install is where the university's news lives.
+      parameters:
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Array of post objects (empty on the portal install).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
+        '400':
+          $ref: '#/components/responses/RestError'
+  /wp/v2/media:
+    get:
+      operationId: listMedia
+      tags:
+      - Content
+      summary: List media items
+      parameters:
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+      responses:
+        '200':
+          description: Array of media objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          $ref: '#/components/responses/RestError'
+components:
+  schemas:
+    Page:
+      type: object
+      description: Field set observed on this deployment on 2026-09-01. No UKM-local fields were found; the record model is stock WordPress.
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+        date_gmt:
+          type: string
+        guid:
+          $ref: '#/components/schemas/Rendered'
+        modified:
+          type: string
+        modified_gmt:
+          type: string
+        slug:
+          type: string
+        status:
+          type: string
+        type:
+          type: string
+        link:
+          type: string
+          format: uri
+        title:
+          $ref: '#/components/schemas/Rendered'
+        content:
+          $ref: '#/components/schemas/Rendered'
+        excerpt:
+          $ref: '#/components/schemas/Rendered'
+        author:
+          type: integer
+        featured_media:
+          type: integer
+        parent:
+          type: integer
+        menu_order:
+          type: integer
+        comment_status:
+          type: string
+        ping_status:
+          type: string
+        template:
+          type: string
+        meta: {}
+        class_list:
+          type: array
+          items:
+            type: string
+        _links:
+          type: object
+    Rendered:
+      type: object
+      properties:
+        rendered:
+          type: string
+        protected:
+          type: boolean
+    RestError:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
+  responses:
+    RestError:
+      description: WordPress REST error envelope. `code` is a machine-readable slug such as `rest_post_invalid_page_number` or `rest_invalid_param`; `data.status` repeats the HTTP status.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RestError'

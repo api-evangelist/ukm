@@ -1,0 +1,127 @@
+# generated: '2026-09-01'
+# method: probed
+# source: https://sso.ukm.my/saml2/idp/metadata.php (200, application/samlmetadata+xml, 4261 bytes),
+#   the SP redirect observed from https://libquest.ukm.my/, and a full scan of the eduGAIN entity
+#   list at https://technical.edugain.org/api.php?action=list_entities&format=json, 2026-09-01.
+# x-operator: institution
+# NOTE: UKM publishes no OpenAPI for its identity provider. This is the pristine pre-refine copy.
+openapi: 3.1.0
+info:
+  title: UKM Identity Provider — SAML 2.0 (SSO@UKM)
+  version: '2.0'
+  summary: Universiti Kebangsaan Malaysia's own SAML 2.0 identity provider and its published metadata.
+  description: >-
+    SSO@UKM is Universiti Kebangsaan Malaysia's institution-operated SAML 2.0 identity provider,
+    a SimpleSAMLphp deployment on the university's own domain at sso.ukm.my. It publishes
+    unauthenticated SAML 2.0 metadata (application/samlmetadata+xml, 4,261 bytes) declaring an
+    IDPSSODescriptor with separate signing and encryption X.509 keys, HTTP-Redirect
+    SingleSignOnService and SingleLogoutService bindings, the transient NameID format, and a
+    technical contact at server@ukm.edu.my. entityID is the bare string "sso.ukm.my" rather than a
+    URI — a deviation from common SAML metadata practice that federation operators normally reject.
+
+    The IdP is confirmed in production: the library's LibQuest service at libquest.ukm.my redirects
+    an unauthenticated visitor to https://sso.ukm.my/saml2/idp/SSOService.php carrying
+    spentityid=https://libquest.ukm.my/simplesaml/module.php/saml/sp/metadata.php/smuSSO-sp.
+
+    UKM is NOT registered in eduGAIN. A scan of the full eduGAIN entity list on 2026-09-01 (10,615
+    entities) returned no entity under ukm.my or ukm.edu.my and no display name matching
+    "Kebangsaan", while sixteen other Malaysian institutions are registered through SIFULAN, the
+    Malaysian Access Federation. UKM's IdP is therefore institution-operated but not
+    inter-federated — its metadata is self-published only.
+
+    This description was written by API Evangelist from live probes on 2026-09-01. There is no
+    self-service relying-party registration; adding a service provider is an administrative process.
+  contact:
+    name: SSO@UKM administrator
+    email: server@ukm.edu.my
+    url: https://sso.ukm.my/
+  x-operator: institution
+  x-institution: Universiti Kebangsaan Malaysia
+  x-software: SimpleSAMLphp
+  x-provenance:
+    generated: '2026-09-01'
+    method: probed
+    source: https://sso.ukm.my/saml2/idp/metadata.php
+servers:
+  - url: https://sso.ukm.my/saml2/idp
+    description: SSO@UKM SAML 2.0 identity provider
+tags:
+  - name: Metadata
+    description: SAML 2.0 metadata publication.
+  - name: Single Sign-On
+    description: SAML 2.0 browser SSO and single logout profiles.
+paths:
+  /metadata.php:
+    get:
+      operationId: getSamlMetadata
+      tags: [ Metadata ]
+      summary: SAML 2.0 IdP metadata document
+      description: >-
+        Returns the identity provider's SAML 2.0 EntityDescriptor. Unauthenticated, no parameters.
+        The document is NOT XML-signed — consumers cannot verify its authenticity from the document
+        alone and must rely on TLS.
+      responses:
+        '200':
+          description: SAML 2.0 metadata.
+          content:
+            application/samlmetadata+xml:
+              schema:
+                type: string
+                contentMediaType: application/samlmetadata+xml
+              examples:
+                metadata:
+                  summary: IdP metadata captured 2026-09-01 (certificates elided in the saved copy)
+                  externalValue: ../examples/ukm-sso-saml-idp-metadata.xml
+  /SSOService.php:
+    get:
+      operationId: samlSingleSignOn
+      tags: [ Single Sign-On ]
+      summary: SAML 2.0 SingleSignOnService (HTTP-Redirect binding)
+      description: >-
+        Browser SSO endpoint. Accepts a SAML AuthnRequest via the HTTP-Redirect binding and returns
+        an interactive login page; it is not callable by a non-browser agent. The only NameID format
+        declared is transient.
+      parameters:
+        - name: SAMLRequest
+          in: query
+          required: false
+          description: Deflated, base64-encoded SAML 2.0 AuthnRequest.
+          schema:
+            type: string
+        - name: spentityid
+          in: query
+          required: false
+          description: >-
+            SimpleSAMLphp IdP-first shorthand naming the service provider entity ID, as used by
+            libquest.ukm.my.
+          schema:
+            type: string
+        - name: RelayState
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Interactive login page (HTML).
+          content:
+            text/html:
+              schema:
+                type: string
+        '302':
+          description: Redirect back to the service provider's assertion consumer service.
+  /SingleLogoutService.php:
+    get:
+      operationId: samlSingleLogout
+      tags: [ Single Sign-On ]
+      summary: SAML 2.0 SingleLogoutService (HTTP-Redirect binding)
+      description: Single logout endpoint declared in the IdP metadata.
+      parameters:
+        - name: SAMLRequest
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect completing the logout flow.

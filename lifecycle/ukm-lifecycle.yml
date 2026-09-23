@@ -1,0 +1,69 @@
+---
+name: Universiti Kebangsaan Malaysia — surface lifecycle
+description: >-
+  Versioning, change communication and deprecation posture for the surfaces UKM operates. Derived
+  by API Evangelist from live probes on 2026-09-01. UKM publishes no changelog, no status page and
+  no deprecation policy for any of them, so everything below is inferred from the software version
+  each deployment reports about itself.
+generated: '2026-09-01'
+method: probed
+source: live probes and software self-reports
+lifecycle:
+  - surface: UKM Learning and Research Repository OAI-PMH
+    version: OAI-PMH 2.0 on DSpace 6.3
+    version_source: 'meta name="Generator" content="DSpace 6.3" on https://ptsldigital.ukm.my/'
+    stability: stable protocol, unsupported platform
+    detail: >-
+      OAI-PMH 2.0 has not changed since 2002, so the interface contract is effectively frozen.
+      The platform is not: DSpace 6.x reached end of support in 2023 and DSpace 7 replaced the JSPUI
+      and the /rest API entirely. earliestDatestamp is 2022-10-03, so the repository itself is
+      younger than the platform release it runs on. deletedRecord policy is "transient", meaning a
+      harvester cannot rely on being told about deletions.
+    deprecation_policy: none published
+  - surface: UKM e-Journal System OAI-PMH
+    version: OAI-PMH 2.0 on Open Journal Systems 2.4.8.1
+    version_source: 'Identify/description/toolkit/version = 2.4.8.1'
+    stability: stable protocol, long-obsolete platform
+    detail: >-
+      OJS 2.4.8.1 was released in 2016 and PKP ended support for the entire OJS 2.x line in 2020.
+      Content runs from 2012-02-19 to the present, so an obsolete platform is carrying live
+      publishing. deletedRecord policy is "persistent", which is the stronger guarantee — harvesters
+      are told about deletions. The PKP REST API is absent because it only exists in OJS 3.x.
+    deprecation_policy: none published
+  - surface: UKM Web Content REST API (WordPress wp/v2)
+    version: wp/v2
+    version_source: 'namespaces[] in https://www.ukm.my/portal/wp-json/'
+    stability: versioned namespace, undocumented deployment
+    detail: >-
+      The namespace carries the version, which is WordPress's contract and not UKM's. Eighteen
+      namespaces are registered, most of them plugin-owned (elementor, wordfence, wp-super-cache,
+      pll, google-site-kit) and none of them covered by any stability promise UKM has made. A plugin
+      update can add or remove routes without notice. There is no changelog and no way for a
+      consumer to be told about a change.
+    deprecation_policy: none published
+  - surface: SSO@UKM SAML 2.0 identity provider
+    version: SAML 2.0
+    version_source: 'protocolSupportEnumeration urn:oasis:names:tc:SAML:2.0:protocol'
+    stability: stable
+    detail: >-
+      Signing and encryption certificates are published in the metadata; no rollover schedule,
+      validUntil or cacheDuration is declared, so a relying party is given no machine-readable
+      signal about when to re-fetch the metadata or when a key will change. Because UKM is not in
+      eduGAIN, there is no federation operator monitoring this on its behalf.
+    deprecation_policy: none published
+  - surface: UKM Journal Article Repository (EPrints)
+    version: unknown
+    stability: unreachable
+    detail: >-
+      journalarticle.ukm.my has not answered on port 80 or 443 across probes on 2026-06-03 and
+      2026-09-01, while its DNS record remains published. Registered in OpenDOAR (record 2122) and
+      ROAR as an OAI-PMH 2.0 repository. Either a long outage or a decommission that was never
+      announced — UKM has published no notice either way, and the OpenDOAR record still describes
+      it as active.
+    deprecation_policy: none published
+observations:
+  - No status page, uptime feed or incident history exists for any UKM surface.
+  - >-
+    www.ukm.my is intermittently slow — three of eleven probes on 2026-09-01 timed out at 25-60
+    seconds while others returned in under two seconds. There is no published SLA and no way for a
+    consumer to distinguish maintenance from failure.

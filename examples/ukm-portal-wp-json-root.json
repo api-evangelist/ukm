@@ -1,0 +1,32 @@
+{
+  "name": "Universiti Kebangsaan Malaysia",
+  "description": "The National University of Malaysia",
+  "url": "https://www.ukm.my/portal",
+  "home": "https://www.ukm.my/portal",
+  "gmt_offset": "8",
+  "namespaces": [
+    "oembed/1.0",
+    "simple-page-ordering/v1",
+    "wordfence-login-security/v1",
+    "wordfence/v1",
+    "wp-super-cache/v1",
+    "elementor-one/v1",
+    "pll/v1",
+    "elementor/v1",
+    "elementor-pro/v1",
+    "elementor-hello-elementor/v1",
+    "google-site-kit/v1",
+    "elementor/v1/documents",
+    "elementor-ai/v1",
+    "elementor/v1/feedback",
+    "wp/v2",
+    "wp-site-health/v1",
+    "wp-block-editor/v1",
+    "wp-abilities/v1"
+  ],
+  "authentication": [],
+  "site_logo": 1007,
+  "site_icon": 0,
+  "routes_total": 314,
+  "_note": "Trimmed capture of https://www.ukm.my/portal/wp-json/ \u2014 314 routes elided for size."
+}

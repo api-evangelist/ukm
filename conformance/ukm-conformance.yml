@@ -1,0 +1,115 @@
+---
+name: Universiti Kebangsaan Malaysia — domain standard conformance
+description: >-
+  Conformance of UKM's institution-operated surfaces against the standards named in the Kin Score
+  `education` regulatory regime. Reward-only: every entry below points at a location that was
+  fetched and read on 2026-09-01. Standards in the regime for which no evidence was found are
+  listed under not_found, and no claim is made for them.
+generated: '2026-09-01'
+method: probed
+source: live probes of ukm.my hosts and the Crossref, ROR and eduGAIN APIs
+conformance:
+  - standard: oai-pmh
+    name: Open Archives Initiative Protocol for Metadata Harvesting 2.0
+    status: conformant
+    operator: institution
+    evidence:
+      - url: https://ptsldigital.ukm.my/oai/request?verb=Identify
+        status: 200
+        location: 'Identify/protocolVersion = 2.0; repositoryName "UKM Learning and Research Repository"'
+      - url: https://ptsldigital.ukm.my/oai/request?verb=ListMetadataFormats
+        status: 200
+        location: '12 metadataPrefix values: uketd_dc, qdc, didl, mods, ore, mets, oai_dc, rdf, marc, xoai, dim, etdms'
+      - url: https://ejournal.ukm.my/index.php/index/oai?verb=Identify
+        status: 200
+        location: 'Identify/protocolVersion = 2.0; repositoryName "UKM e-Journal System"; toolkit Open Journal Systems 2.4.8.1'
+      - url: https://ejournal.ukm.my/index.php/index/oai?verb=ListSets
+        status: 200
+        location: 100 sets
+      - url: https://ptsldigital.ukm.my/oai/request?verb=Bogus
+        status: 200
+        location: badVerb error element returned with HTTP 200, per the OAI-PMH error profile
+    note: >-
+      Two independent institution-operated OAI-PMH 2.0 endpoints on UKM's own domain. A third —
+      the EPrints interface at journalarticle.ukm.my — is registry-confirmed but its host has not
+      answered on port 80 or 443 since at least 2026-06-03, so it is not counted here.
+  - standard: saml
+    name: SAML 2.0 Web Browser SSO / metadata
+    status: conformant
+    operator: institution
+    evidence:
+      - url: https://sso.ukm.my/saml2/idp/metadata.php
+        status: 200
+        location: >-
+          application/samlmetadata+xml, 4261 bytes. md:EntityDescriptor entityID "sso.ukm.my" with
+          md:IDPSSODescriptor protocolSupportEnumeration urn:oasis:names:tc:SAML:2.0:protocol,
+          signing and encryption KeyDescriptors, SingleSignOnService and SingleLogoutService on the
+          HTTP-Redirect binding, transient NameIDFormat, technical contact server@ukm.edu.my.
+      - url: https://libquest.ukm.my/
+        status: 200
+        location: >-
+          Redirects to https://sso.ukm.my/saml2/idp/SSOService.php with
+          spentityid=https://libquest.ukm.my/simplesaml/module.php/saml/sp/metadata.php/smuSSO-sp —
+          the IdP is in production, not just published.
+    gaps:
+      - entityID is the bare string "sso.ukm.my", not a URI. SAML metadata consumers and federation
+        operators commonly reject a non-URI entityID.
+      - The metadata document is not XML-signed.
+      - Only the transient NameID format is declared; no persistent or eduPersonTargetedID.
+      - No inter-federation registration. UKM is absent from eduGAIN (see not_found below).
+  - standard: crossref
+    name: Crossref DOI registration
+    status: registered
+    operator: registry
+    evidence:
+      - url: https://api.crossref.org/members?query=Universiti+Kebangsaan+Malaysia
+        status: 200
+        location: >-
+          Three member records: 7332 "Penerbit Universiti Kebangsaan Malaysia (UKM Press)",
+          prefix 10.17576, 16,243 DOIs; 8124 "Faculty of Medicine, Universiti Kebangsaan Malaysia",
+          prefix 10.17845, 30 DOIs; 11019 "Research Centre for Sharia, Faculty of Islamic Studies,
+          Universiti Kebangsaan Malaysia", prefix 10.26475, 174 DOIs.
+    note: >-
+      A membership, not a contract. Crossref's API is Crossref's; the registrant identity and the
+      three DOI prefixes are UKM's, and the DOIs are minted against articles served by the UKM
+      e-Journal System OAI-PMH endpoint above.
+not_found:
+  - standard: shibboleth
+    detail: >-
+      The IdP at sso.ukm.my is SimpleSAMLphp, not Shibboleth, and UKM is not registered in eduGAIN
+      or listed under SIFULAN in the eduGAIN entity export. SAML 2.0 conformance is claimed above;
+      Shibboleth specifically is not.
+    evidence:
+      - url: https://technical.edugain.org/api.php?action=list_entities&format=json
+        status: 200
+        location: >-
+          10,615 entities scanned 2026-09-01. No entityid, scope or display name matching ukm.my,
+          ukm.edu.my or "Kebangsaan". Sixteen other Malaysian institutions are registered via
+          SIFULAN (regauth https://sifulan.my).
+  - standard: datacite
+    detail: No DataCite provider or repository client found for UKM.
+    evidence:
+      - url: https://api.datacite.org/providers?query=Kebangsaan
+        status: 200
+        location: 'meta.total = 0'
+      - url: https://api.datacite.org/clients?query=ukm.my
+        status: 200
+        location: 'meta.total = 0'
+  - standard: orcid
+    detail: >-
+      No institutional ORCID member record or ORCID integration was evidenced on any UKM host.
+      Individual UKM researchers hold ORCID iDs; that is not an institutional surface.
+  - standard: scim
+    detail: No SCIM endpoint found. Identity provisioning is not exposed.
+  - standard: lti
+    detail: >-
+      No LTI tool or platform registration surface found. UKM's learning management system is not
+      publicly reachable.
+  - standard: oneroster
+    detail: No OneRoster endpoint found.
+  - standard: ed-fi
+    detail: No Ed-Fi endpoint found. Ed-Fi is a US K-12 standard and is not expected here.
+  - standard: caliper
+    detail: No Caliper analytics endpoint found.
+  - standard: qti
+    detail: No QTI assessment interchange surface found.

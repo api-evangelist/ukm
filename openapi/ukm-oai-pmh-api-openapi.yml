@@ -1,0 +1,189 @@
+openapi: 3.2.0
+info:
+  title: Ukm OAI PMH API
+  version: '2.0'
+  x-institution: Universiti Kebangsaan Malaysia
+  x-operator: institution
+  x-refined-note:
+  - x-provenance differs across the merged source definitions and was not carried
+  - x-software differs across the merged source definitions and was not carried
+  description: 'Operations tagged OAI-PMH across 2 of this provider''s published API definitions: ukm-ejournal-oai-pmh-openapi.yml, ukm-ptsl-digital-oai-pmh-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://ejournal.ukm.my/index.php/index
+  description: Site-wide OAI-PMH endpoint (all journals)
+- url: https://ptsldigital.ukm.my/oai
+  description: Institution-operated OAI-PMH endpoint
+tags:
+- name: oai pmh
+  description: Open Archives Initiative Protocol for Metadata Harvesting, version 2.0.
+paths:
+  /oai:
+    get:
+      operationId: ejournalOaiRequest
+      tags:
+      - oai pmh
+      summary: OAI-PMH 2.0 request endpoint
+      description: Single OAI-PMH endpoint for every journal on the platform. The `verb` parameter selects the operation. Protocol errors are returned inside an XML `` element with HTTP status 200. A single journal can be harvested with `set`, or by substituting the journal path for `index` in the base URL.
+      parameters:
+      - name: verb
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - Identify
+          - ListMetadataFormats
+          - ListSets
+          - ListIdentifiers
+          - ListRecords
+          - GetRecord
+      - name: metadataPrefix
+        in: query
+        required: false
+        description: Metadata format. Required for ListIdentifiers, ListRecords and GetRecord.
+        schema:
+          type: string
+          enum:
+          - oai_dc
+          - oai_marc
+          - marcxml
+          - nlm
+          - rfc1807
+      - name: identifier
+        in: query
+        required: false
+        description: OAI identifier of a single record. Required for GetRecord.
+        schema:
+          type: string
+        example: oai:ojs.ukm.my:article/1
+      - name: set
+        in: query
+        required: false
+        description: Set spec restricting the harvest to one journal or journal section.
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: until
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: resumptionToken
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OAI-PMH XML response. Protocol errors also return 200 with an `<error>` element.
+          content:
+            text/xml:
+              schema:
+                type: string
+                contentMediaType: text/xml
+              examples:
+                identify:
+                  summary: Identify response (captured 2026-09-01)
+                  externalValue: ../examples/ukm-ejournal-oai-identify.xml
+    servers:
+    - url: https://ejournal.ukm.my/index.php/index
+      description: Site-wide OAI-PMH endpoint (all journals)
+  /request:
+    get:
+      operationId: oaiRequest
+      tags:
+      - oai pmh
+      summary: OAI-PMH 2.0 request endpoint
+      description: Single OAI-PMH endpoint. The `verb` parameter selects the operation. All six protocol verbs were verified live on 2026-09-01. Protocol errors are returned inside an XML `` element with HTTP status 200, as the OAI-PMH specification requires.
+      parameters:
+      - name: verb
+        in: query
+        required: true
+        description: OAI-PMH verb.
+        schema:
+          type: string
+          enum:
+          - Identify
+          - ListMetadataFormats
+          - ListSets
+          - ListIdentifiers
+          - ListRecords
+          - GetRecord
+        examples:
+          identify:
+            value: Identify
+      - name: metadataPrefix
+        in: query
+        required: false
+        description: Metadata format. Required for ListIdentifiers, ListRecords and GetRecord. Twelve formats are offered by this deployment.
+        schema:
+          type: string
+          enum:
+          - uketd_dc
+          - qdc
+          - didl
+          - mods
+          - ore
+          - mets
+          - oai_dc
+          - rdf
+          - marc
+          - xoai
+          - dim
+          - etdms
+      - name: identifier
+        in: query
+        required: false
+        description: OAI identifier of a single record. Required for GetRecord.
+        schema:
+          type: string
+        example: oai:http://ptsldigitalv2.ukm.my:123456789/1234
+      - name: set
+        in: query
+        required: false
+        description: Set spec to restrict a selective harvest to one DSpace collection.
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: false
+        description: Lower bound of the datestamp range. Granularity YYYY-MM-DDThh:mm:ssZ.
+        schema:
+          type: string
+      - name: until
+        in: query
+        required: false
+        description: Upper bound of the datestamp range.
+        schema:
+          type: string
+      - name: resumptionToken
+        in: query
+        required: false
+        description: Flow-control token returned by an incomplete list response.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OAI-PMH XML response. Protocol errors also return 200 with an `<error>` element — read the body, not the status code.
+          content:
+            text/xml:
+              schema:
+                type: string
+                contentMediaType: text/xml
+              examples:
+                identify:
+                  summary: Identify response (captured 2026-09-01)
+                  externalValue: ../examples/ukm-ptsldigital-oai-identify.xml
+                badVerb:
+                  summary: Protocol error returned with HTTP 200
+                  externalValue: ../examples/ukm-ptsldigital-oai-badverb.xml
+    servers:
+    - url: https://ptsldigital.ukm.my/oai
+      description: Institution-operated OAI-PMH endpoint
+x-refined-from:
+- ukm-ejournal-oai-pmh-openapi.yml
+- ukm-ptsl-digital-oai-pmh-openapi.yml

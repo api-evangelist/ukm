@@ -1,0 +1,56 @@
+---
+name: Universiti Kebangsaan Malaysia — error semantics
+description: >-
+  Error behaviour observed on UKM's institution-operated surfaces. Derived by API Evangelist from
+  live probes on 2026-09-01, including deliberate bad-input probes. UKM documents none of this.
+generated: '2026-09-01'
+method: probed
+source: live probes of ptsldigital.ukm.my, ejournal.ukm.my and www.ukm.my
+errors:
+  - surface: OAI-PMH endpoints (ptsldigital.ukm.my, ejournal.ukm.my)
+    style: protocol-level, in-band
+    detail: >-
+      Both endpoints follow the OAI-PMH 2.0 error profile: a protocol error is returned with HTTP
+      status 200 and an `<error code="…">` element inside the OAI-PMH envelope. A client that reads
+      only the status code will treat every malformed request as a success. Verified with
+      ?verb=Bogus on both hosts — 200, 468 bytes and 507 bytes respectively, each carrying an error
+      element.
+    codes:
+      - code: badVerb
+        detail: Value of the verb argument is not a legal OAI-PMH verb, is repeated, or is missing.
+      - code: badArgument
+        detail: Illegal, missing or repeated argument.
+      - code: cannotDisseminateFormat
+        detail: metadataPrefix is not supported by the item or the repository.
+      - code: idDoesNotExist
+        detail: The identifier is unknown or illegal in this repository.
+      - code: noRecordsMatch
+        detail: The from/until/set combination selects nothing.
+      - code: noSetHierarchy
+        detail: The repository does not support sets. Not applicable here — both repositories do.
+      - code: badResumptionToken
+        detail: The resumptionToken is invalid or expired.
+  - surface: UKM Web Content REST API (WordPress wp/v2)
+    style: JSON error envelope with a correct HTTP status
+    detail: >-
+      Stock WordPress REST errors — a JSON object with `code` (machine-readable slug), `message`
+      (human-readable, in the site locale) and `data.status` repeating the HTTP status. Common
+      codes include rest_no_route (404), rest_invalid_param (400),
+      rest_post_invalid_page_number (400) and rest_post_invalid_id (404).
+  - surface: www.ukm.my (non-WordPress paths)
+    style: HTML
+    detail: >-
+      The edge returns a small unstyled HTML block — "The specified URL cannot be found." plus a
+      client IP and a request id — with HTTP 404. Confirmed on /robots.txt, /sitemap.xml,
+      /llms.txt and /.well-known/security.txt. Not machine-readable, but the status code is
+      honest: it is a real 404, not a soft-200.
+  - surface: journalarticle.ukm.my
+    style: no response
+    detail: >-
+      Not an error format — a dead host. TCP connections to port 80 and port 443 both time out
+      while DNS resolves to 103.219.237.180. Unchanged since the 2026-06-03 review.
+observations:
+  - No surface returns a Retry-After, a rate-limit header, or a correlation id a caller could quote
+    in a support request.
+  - Errors on the OAI-PMH endpoints are localised in neither Malay nor English beyond the OAI-PMH
+    standard's own English strings.

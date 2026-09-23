@@ -1,0 +1,55 @@
+---
+name: Universiti Kebangsaan Malaysia — authentication
+description: >-
+  How authentication works on the surfaces UKM itself operates. Derived by API Evangelist from live
+  probes on 2026-09-01; UKM publishes no authentication documentation for any of them.
+generated: '2026-09-01'
+method: probed
+source: live probes of ptsldigital.ukm.my, ejournal.ukm.my, www.ukm.my and sso.ukm.my
+authentication:
+  - surface: UKM Learning and Research Repository OAI-PMH
+    baseURL: https://ptsldigital.ukm.my/oai/request
+    x-operator: institution
+    type: none
+    detail: >-
+      Unauthenticated. All six OAI-PMH verbs answer without credentials, headers or an API key.
+      No key registration exists. Deposit and administration are behind the DSpace 6.3 login,
+      which is not part of this surface.
+  - surface: UKM e-Journal System OAI-PMH
+    baseURL: https://ejournal.ukm.my/index.php/index/oai
+    x-operator: institution
+    type: none
+    detail: >-
+      Unauthenticated. OJS 2.4.8.1 exposes no REST API and no token issuance; /api/v1/contexts
+      returns 404.
+  - surface: UKM Web Content REST API (WordPress wp/v2)
+    baseURL: https://www.ukm.my/portal/wp-json
+    x-operator: institution
+    type: none
+    detail: >-
+      Unauthenticated for reads. The discovery document reports `authentication: []`, meaning no
+      authentication handler is registered for the REST API — cookie plus nonce is the only path
+      for writes and is available to logged-in browser sessions only. There is no application
+      password, OAuth or API key surface for third parties.
+  - surface: SSO@UKM SAML 2.0 identity provider
+    baseURL: https://sso.ukm.my/saml2/idp
+    x-operator: institution
+    type: saml2
+    detail: >-
+      This surface IS the university's authentication. Metadata retrieval is unauthenticated;
+      the SSO and SLO endpoints implement SAML 2.0 Web Browser SSO over the HTTP-Redirect binding
+      and are interactive — a non-browser agent cannot complete the flow. Only the transient
+      NameID format is offered, so a relying party receives no stable subject identifier from the
+      NameID alone. There is no self-service relying-party registration and no dynamic client
+      registration; onboarding a service provider is an administrative process handled by
+      server@ukm.edu.my.
+    endpoints:
+      metadata: https://sso.ukm.my/saml2/idp/metadata.php
+      sso: https://sso.ukm.my/saml2/idp/SSOService.php
+      slo: https://sso.ukm.my/saml2/idp/SingleLogoutService.php
+gaps:
+  - No API key, OAuth 2.0 or OpenID Connect surface exists anywhere on UKM's own domain.
+    https://sso.ukm.my/.well-known/openid-configuration returns 404.
+  - No documented terms govern automated access to any of the unauthenticated surfaces above.
+  - Staff and student services (appsmu.ukm.my, erep.ukm.my, libquest.ukm.my) sit behind SSO@UKM and
+    are not open to third parties.

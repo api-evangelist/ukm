@@ -64,63 +64,106 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Universiti Kebangsaan Malaysia (UKM), The National University of Malaysia, is a public research university in Bangi, Selangor, ranked #138 in the QS World University Rankings 2025. This repository catalogs UKM's public, machine-readable developer/API footprint as an [APIs.json](http://apisjson.org) profile. UKM does not operate a general-purpose developer portal; its verifiable footprint is library-operated scholarly infrastructure exposing standards-based OAI-PMH interfaces.
+Universiti Kebangsaan Malaysia (UKM), The National University of Malaysia, is a public research university in Bangi, Selangor, established 1970 ([ROR 00bw8d226](https://ror.org/00bw8d226)). This repository catalogs UKM's public, machine-readable footprint as an [APIs.json](http://apisjson.org) profile, under the API Evangelist **university** pipeline — which settles *who operates* each surface before saving anything.
+
+UKM publishes no developer portal, no API documentation, no OpenAPI, no changelog and no status page. What it does operate, unauthenticated and on its own domain, is four machine-readable surfaces it has never described anywhere: a SAML 2.0 identity provider, two OAI-PMH 2.0 endpoints, and an open WordPress `wp/v2` REST API on two installations.
 
 - APIs.json: https://raw.githubusercontent.com/api-evangelist/ukm/refs/heads/main/apis.yml
 - Run with Naftiko: https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=ukm-api-evangelist&utm_content=repo
 
 ## Type
 
+- university / Public Research University
 - Index
 - Consumer
-- 3rd-Party
+- Public
 
 ## Tags
 
-Education, Higher Education, University, Research, Open Access, Institutional Repository, OAI-PMH, Library, Malaysia
+University, Higher Education, Education, Research, Malaysia, Southeast Asia, Identity Federation, SAML, Research Repository, Institutional Repository, OAI-PMH, Open Access, Scholarly Publishing, Library, Theses
 
-## APIs
+## Surfaces
 
-- **UKM Learning and Research Repository (OAI-PMH)** — DSpace institutional repository (theses, exam papers, government and law documents) with a live OAI-PMH 2.0 interface.
-  - Docs: https://ptsldigital.ukm.my/
+Every entry carries an `x-operator`. `institution` means UKM runs the thing the contract describes; `registry` means UKM is registered in someone else's registry; `tenant` means UKM's account on a vendor's platform, where the data is UKM's and the contract is the vendor's.
+
+### institution
+
+- **SSO@UKM — SAML 2.0 Identity Provider** — SimpleSAMLphp IdP publishing unauthenticated SAML 2.0 metadata. In production (libquest.ukm.my is a registered SP). Not in eduGAIN.
+  - Metadata: https://sso.ukm.my/saml2/idp/metadata.php
+  - [openapi/ukm-identity-federation-openapi.yml](openapi/ukm-identity-federation-openapi.yml)
+- **UKM Learning and Research Repository (OAI-PMH)** — DSpace 6.3, twelve metadata formats, run by Perpustakaan Tun Seri Lanang.
   - OAI-PMH: https://ptsldigital.ukm.my/oai/request?verb=Identify
-- **UKM Journal Article Repository (OAI-PMH)** — EPrints repository of UKM faculty/institute/UKM Press journal articles; OAI-PMH 2.0 capable (registry-confirmed).
-  - Docs: http://journalarticle.ukm.my/eprints/
-  - OAI-PMH: http://journalarticle.ukm.my/cgi/oai2?verb=Identify
+  - [openapi/ukm-ptsl-digital-oai-pmh-openapi.yml](openapi/ukm-ptsl-digital-oai-pmh-openapi.yml)
+- **UKM e-Journal System (OAI-PMH)** — Open Journal Systems 2.4.8.1, five metadata formats, 100 sets. Not previously catalogued.
+  - OAI-PMH: https://ejournal.ukm.my/index.php/index/oai?verb=Identify
+  - [openapi/ukm-ejournal-oai-pmh-openapi.yml](openapi/ukm-ejournal-oai-pmh-openapi.yml)
+- **UKM Web Content REST API (WordPress wp/v2)** — 314 routes, unauthenticated reads, two installations. Undocumented and ungoverned.
+  - Route index: https://www.ukm.my/portal/wp-json/
+  - [openapi/ukm-web-content-rest-openapi.yml](openapi/ukm-web-content-rest-openapi.yml)
+- **UKM Journal Article Repository (OAI-PMH) — unreachable** — EPrints repository registered in OpenDOAR and ROAR. `journalarticle.ukm.my` resolves but has not answered on port 80 or 443 since at least June 2026. Retained as a fact; its dead pointers were removed.
   - Registry: https://opendoar.ac.uk/repository/2122
 
-## Plans
+### registry
 
-- [plans/ukm-plans-pricing.yml](plans/ukm-plans-pricing.yml)
+- **Crossref DOI Registration** — three memberships owned by UKM units, 16,447 DOIs: [7332 UKM Press](https://api.crossref.org/members/7332) (10.17576), [8124 Faculty of Medicine](https://api.crossref.org/members/8124) (10.17845), [11019 Research Centre for Sharia](https://api.crossref.org/members/11019) (10.26475).
+- **ROR Organization Registration** — https://ror.org/00bw8d226
 
-## Rate Limits
+### tenant
 
-- [rate-limits/ukm-rate-limits.yml](rate-limits/ukm-rate-limits.yml)
+- **Springshare LibGuides** — https://ukm.libguides.com/ — relationship recorded, vendor contract not saved.
+- **RemoteXs E-Resources Proxy** — https://eresourcesptsl.ukm.remotexs.co/ — relationship recorded, vendor contract not saved.
 
-## FinOps
+## Artifacts
 
-- [finops/ukm-finops.yml](finops/ukm-finops.yml)
+- OpenAPI: [openapi/](openapi/) (pristine pre-refine copies in [openapi/_original/](openapi/_original/))
+- JSON Schema: [json-schema/ukm-wordpress-page-schema.json](json-schema/ukm-wordpress-page-schema.json)
+- Examples: [examples/](examples/)
+- Conformance: [conformance/ukm-conformance.yml](conformance/ukm-conformance.yml)
+- Authentication: [authentication/ukm-authentication.yml](authentication/ukm-authentication.yml)
+- Errors: [errors/ukm-errors.yml](errors/ukm-errors.yml)
+- Lifecycle: [lifecycle/ukm-lifecycle.yml](lifecycle/ukm-lifecycle.yml)
+- Vocabulary: [vocabulary/ukm-vocabulary.yml](vocabulary/ukm-vocabulary.yml)
+- JSON-LD: [json-ld/ukm-context.jsonld](json-ld/ukm-context.jsonld)
+- Plans: [plans/ukm-plans-pricing.yml](plans/ukm-plans-pricing.yml)
+- Rate Limits: [rate-limits/ukm-rate-limits.yml](rate-limits/ukm-rate-limits.yml)
+- FinOps: [finops/ukm-finops.yml](finops/ukm-finops.yml)
+- Domain Security: [security/ukm-domain-security.yml](security/ukm-domain-security.yml)
+- Review: [review.yml](review.yml)
+
+## Domain standard conformance (education regime)
+
+Evidenced from UKM's own surfaces only. See [conformance/ukm-conformance.yml](conformance/ukm-conformance.yml).
+
+- **oai-pmh** — conformant, two live institution-operated endpoints.
+- **saml** — conformant, with published gaps (non-URI entityID, unsigned metadata, transient NameID only).
+- **crossref** — registered, three memberships.
+- Not found: shibboleth, datacite, orcid, scim, lti, oneroster, ed-fi, caliper, qti.
 
 ## Timestamps
 
 - Created: 2026-06-03
-- Modified: 2026-06-03
+- Modified: 2026-09-01
 
 ## Common Properties
 
-- Website: https://www.ukm.my/portalukm/
+- Website: https://www.ukm.my/portal/
+- Blog: https://www.ukm.my/beritaukm/ (RSS: https://www.ukm.my/beritaukm/feed/)
+- API Reference: https://www.ukm.my/portal/wp-json/
+- Identity Federation: https://sso.ukm.my/saml2/idp/metadata.php
+- Research Repository: https://ptsldigital.ukm.my/ and https://ejournal.ukm.my/
+- Library: https://www.ukm.my/ptsl/
 - LinkedIn: https://www.linkedin.com/school/universitikebangsaanmalaysia/
-- Plans: [plans/ukm-plans-pricing.yml](plans/ukm-plans-pricing.yml)
-- Rate Limits: [rate-limits/ukm-rate-limits.yml](rate-limits/ukm-rate-limits.yml)
-- FinOps: [finops/ukm-finops.yml](finops/ukm-finops.yml)
-- Review: [review.yml](review.yml)
 
 ## Notes
 
-- All endpoints were probed on 2026-06-03. The DSpace OAI-PMH endpoint at `ptsldigital.ukm.my` returned a valid OAI-PMH 2.0 Identify response (HTTP 200).
-- The EPrints UKM Journal Article Repository (`journalarticle.ukm.my`) is registry-confirmed (ROAR / OpenDOAR) as OAI-PMH 2.0 capable, but its host did not respond to automated probes during this review.
-- No official UKM GitHub organization exists; `github.com/ukm` is an unrelated personal account and was deliberately excluded.
-- Student/staff online services run behind institutional single sign-on and are not publicly documented. No endpoints were fabricated.
+- Re-profiled 2026-09-01 under the university pipeline. Every OpenAPI in this repo was written by API Evangelist from live probes and is marked `method: probed` — UKM publishes none of its own.
+- No vendor contract had been misattributed to UKM, so nothing was removed on that account. The two vendor tenancies found are recorded as relationships only.
+- Every pointer emitted here was fetched and confirmed live on 2026-09-01. Dead pointers to `journalarticle.ukm.my` were removed; the stale `www.ukm.my/portalukm/` Website pointer was corrected to `www.ukm.my/portal/`.
+- `www.ukm.my` returns 404 for robots.txt, sitemap.xml, llms.txt and .well-known/security.txt. `sso.ukm.my` has no OpenID Connect discovery document.
+- UKM is **not** registered in eduGAIN — all 10,615 entities were scanned on 2026-09-01 — while sixteen other Malaysian institutions are, via SIFULAN.
+- Both scholarly platforms are years past end of support: DSpace 6.3 (EOL 2023) and OJS 2.4.8.1 (EOL 2020).
+- No official UKM GitHub organization was found; `github.com/ukm` is an unrelated personal account and is deliberately excluded. `UKM-HEP` and `UKM-NUKE` are research-group orgs with no evidenced institutional endorsement and are not credited.
+- No course catalog, timetable, registrar, open data portal, research computing surface or AI policy was found. No endpoints were fabricated.
 
 ## Maintainers
 

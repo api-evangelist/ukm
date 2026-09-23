@@ -1,0 +1,74 @@
+openapi: 3.2.0
+info:
+  title: UKM Identity Provider — SAML 2.0 (SSO@UKM) Single Sign-On…
+  version: '2.0'
+  summary: Universiti Kebangsaan Malaysia's own SAML 2.0 identity provider and its published metadata.
+  description: SSO@UKM is Universiti Kebangsaan Malaysia's institution-operated SAML 2.0 identity provider, a SimpleSAMLphp deployment on the university's own domain at sso.ukm.my.
+  contact:
+    name: SSO@UKM administrator
+    email: server@ukm.edu.my
+    url: https://sso.ukm.my/
+  x-operator: institution
+  x-institution: Universiti Kebangsaan Malaysia
+  x-software: SimpleSAMLphp
+  x-provenance:
+    generated: '2026-09-01'
+    method: probed
+    source: https://sso.ukm.my/saml2/idp/metadata.php
+servers:
+- url: https://sso.ukm.my/saml2/idp
+  description: SSO@UKM SAML 2.0 identity provider
+tags:
+- name: Single Sign On
+  description: SAML 2.0 browser SSO and single logout profiles.
+paths:
+  /SSOService.php:
+    get:
+      operationId: samlSingleSignOn
+      tags:
+      - Single Sign On
+      summary: SAML 2.0 SingleSignOnService (HTTP-Redirect binding)
+      description: Browser SSO endpoint. Accepts a SAML AuthnRequest via the HTTP-Redirect binding and returns an interactive login page; it is not callable by a non-browser agent. The only NameID format declared is transient.
+      parameters:
+      - name: SAMLRequest
+        in: query
+        required: false
+        description: Deflated, base64-encoded SAML 2.0 AuthnRequest.
+        schema:
+          type: string
+      - name: spentityid
+        in: query
+        required: false
+        description: SimpleSAMLphp IdP-first shorthand naming the service provider entity ID, as used by libquest.ukm.my.
+        schema:
+          type: string
+      - name: RelayState
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Interactive login page (HTML).
+          content:
+            text/html:
+              schema:
+                type: string
+        '302':
+          description: Redirect back to the service provider's assertion consumer service.
+  /SingleLogoutService.php:
+    get:
+      operationId: samlSingleLogout
+      tags:
+      - Single Sign On
+      summary: SAML 2.0 SingleLogoutService (HTTP-Redirect binding)
+      description: Single logout endpoint declared in the IdP metadata.
+      parameters:
+      - name: SAMLRequest
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '302':
+          description: Redirect completing the logout flow.

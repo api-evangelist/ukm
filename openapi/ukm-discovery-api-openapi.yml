@@ -1,0 +1,61 @@
+openapi: 3.2.0
+info:
+  title: UKM Web Content REST API (WordPress wp/v2) Discovery API
+  version: wp/v2
+  summary: Unauthenticated read access to Universiti Kebangsaan Malaysia's own website content.
+  description: Universiti Kebangsaan Malaysia runs its main web estate on self-hosted WordPress and leaves the WordPress REST API open for unauthenticated reads on its own domain.
+  contact:
+    name: Universiti Kebangsaan Malaysia
+    url: https://www.ukm.my/portal/
+  x-operator: institution
+  x-institution: Universiti Kebangsaan Malaysia
+  x-software: WordPress (REST API wp/v2)
+  x-provenance:
+    generated: '2026-09-01'
+    method: probed
+    source: https://www.ukm.my/portal/wp-json/
+servers:
+- url: https://www.ukm.my/portal/wp-json
+  description: UKM main portal (www.ukm.my/portal)
+- url: https://www.ukm.my/beritaukm/wp-json
+  description: Berita UKM news site
+tags:
+- name: Discovery
+  description: Self-descriptive route index.
+paths:
+  /:
+    get:
+      operationId: getRouteIndex
+      tags:
+      - Discovery
+      summary: REST API discovery document
+      description: 'Returns site identity, the registered namespaces, and the full route table with per-route methods, arguments and defaults. On the portal install this is 314 routes across 18 namespaces and reports `authentication: []`.'
+      responses:
+        '200':
+          description: Route index.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  url:
+                    type: string
+                    format: uri
+                  home:
+                    type: string
+                    format: uri
+                  namespaces:
+                    type: array
+                    items:
+                      type: string
+                  routes:
+                    type: object
+                  authentication: {}
+              examples:
+                portal:
+                  summary: Portal discovery document, routes elided
+                  externalValue: ../examples/ukm-portal-wp-json-root.json

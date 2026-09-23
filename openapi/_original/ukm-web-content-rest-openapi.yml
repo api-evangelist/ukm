@@ -1,0 +1,277 @@
+# generated: '2026-09-01'
+# method: probed
+# source: live probes of https://www.ukm.my/portal/wp-json/ (314 routes, 18 namespaces),
+#   /wp/v2/pages, /wp/v2/posts and https://www.ukm.my/beritaukm/wp-json/, 2026-09-01.
+# x-operator: institution
+# NOTE: UKM publishes no OpenAPI and does not document these endpoints. Only routes verified
+# against this deployment are described. This is the pristine pre-refine copy.
+openapi: 3.1.0
+info:
+  title: UKM Web Content REST API (WordPress wp/v2)
+  version: wp/v2
+  summary: Unauthenticated read access to Universiti Kebangsaan Malaysia's own website content.
+  description: >-
+    Universiti Kebangsaan Malaysia runs its main web estate on self-hosted WordPress and leaves the
+    WordPress REST API open for unauthenticated reads on its own domain. Two installations were
+    verified live on 2026-09-01: the main portal at https://www.ukm.my/portal/wp-json/ (discovery
+    document 307 KB, 314 routes, 18 namespaces, `authentication: []`, site name "Universiti
+    Kebangsaan Malaysia") and the news site Berita UKM at https://www.ukm.my/beritaukm/wp-json/
+    (discovery document 225 KB). Both answer GET /wp/v2/pages and /wp/v2/posts with JSON.
+
+    This is the closest thing UKM has to a public read API for its own institutional content, and
+    it is genuinely institution-operated: UKM's domain, UKM's hosting, UKM's content. The contract
+    is WordPress's — it is the stock wp/v2 route set, not something UKM designed — so only the
+    routes verified against this deployment are described here, and the deployment is what is
+    credited, not the software.
+
+    Caveats found by probe. GET /wp/v2/posts returns an empty array on the portal install: the
+    portal is built entirely from pages, and the news content lives on the separate beritaukm
+    install, which also publishes an RSS feed. The host is intermittently slow — three of eleven
+    probes to www.ukm.my timed out at 25-60 seconds. There is no rate-limit header, no documented
+    terms for automated access, no robots.txt, no sitemap.xml and no llms.txt on www.ukm.my (all
+    404). The self-descriptive route index at /wp-json/ is the only documentation.
+
+    This description was written by API Evangelist from live probes on 2026-09-01. UKM publishes no
+    OpenAPI and does not document these endpoints anywhere.
+  contact:
+    name: Universiti Kebangsaan Malaysia
+    url: https://www.ukm.my/portal/
+  x-operator: institution
+  x-institution: Universiti Kebangsaan Malaysia
+  x-software: WordPress (REST API wp/v2)
+  x-provenance:
+    generated: '2026-09-01'
+    method: probed
+    source: https://www.ukm.my/portal/wp-json/
+servers:
+  - url: https://www.ukm.my/portal/wp-json
+    description: UKM main portal (www.ukm.my/portal)
+  - url: https://www.ukm.my/beritaukm/wp-json
+    description: Berita UKM news site
+tags:
+  - name: Discovery
+    description: Self-descriptive route index.
+  - name: Content
+    description: Pages, posts and media.
+paths:
+  /:
+    get:
+      operationId: getRouteIndex
+      tags: [ Discovery ]
+      summary: REST API discovery document
+      description: >-
+        Returns site identity, the registered namespaces, and the full route table with per-route
+        methods, arguments and defaults. On the portal install this is 314 routes across 18
+        namespaces and reports `authentication: []`.
+      responses:
+        '200':
+          description: Route index.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name: { type: string }
+                  description: { type: string }
+                  url: { type: string, format: uri }
+                  home: { type: string, format: uri }
+                  namespaces:
+                    type: array
+                    items: { type: string }
+                  routes: { type: object }
+                  authentication: {}
+              examples:
+                portal:
+                  summary: Portal discovery document, routes elided
+                  externalValue: ../examples/ukm-portal-wp-json-root.json
+  /wp/v2/pages:
+    get:
+      operationId: listPages
+      tags: [ Content ]
+      summary: List published pages
+      description: >-
+        Returns published pages as JSON. Verified live on the portal install 2026-09-01
+        (63 KB for a single page record). Pagination is by `page` and `per_page`; total counts are
+        returned in the X-WP-Total and X-WP-TotalPages response headers.
+      parameters:
+        - name: per_page
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 10 }
+        - name: page
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, default: 1 }
+        - name: search
+          in: query
+          required: false
+          schema: { type: string }
+        - name: slug
+          in: query
+          required: false
+          schema: { type: string }
+        - name: parent
+          in: query
+          required: false
+          schema: { type: integer }
+        - name: orderby
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [ author, date, id, include, modified, parent, relevance, slug, title, menu_order ]
+      responses:
+        '200':
+          description: Array of page objects.
+          headers:
+            X-WP-Total:
+              description: Total number of matching records.
+              schema: { type: integer }
+            X-WP-TotalPages:
+              description: Total number of pages of results.
+              schema: { type: integer }
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
+              examples:
+                page:
+                  summary: One page record captured 2026-09-01 (rendered HTML elided)
+                  externalValue: ../examples/ukm-portal-wp-page.json
+        '400':
+          $ref: '#/components/responses/RestError'
+  /wp/v2/pages/{id}:
+    get:
+      operationId: getPage
+      tags: [ Content ]
+      summary: Retrieve one page
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Page object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page'
+        '404':
+          $ref: '#/components/responses/RestError'
+  /wp/v2/posts:
+    get:
+      operationId: listPosts
+      tags: [ Content ]
+      summary: List published posts
+      description: >-
+        Returns published posts. On the portal install this returns an empty array — the portal
+        carries no posts. The Berita UKM install is where the university's news lives.
+      parameters:
+        - name: per_page
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 10 }
+        - name: page
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, default: 1 }
+        - name: search
+          in: query
+          required: false
+          schema: { type: string }
+      responses:
+        '200':
+          description: Array of post objects (empty on the portal install).
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
+        '400':
+          $ref: '#/components/responses/RestError'
+  /wp/v2/media:
+    get:
+      operationId: listMedia
+      tags: [ Content ]
+      summary: List media items
+      parameters:
+        - name: per_page
+          in: query
+          required: false
+          schema: { type: integer, minimum: 1, maximum: 100, default: 10 }
+      responses:
+        '200':
+          description: Array of media objects.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: object }
+        '400':
+          $ref: '#/components/responses/RestError'
+components:
+  responses:
+    RestError:
+      description: >-
+        WordPress REST error envelope. `code` is a machine-readable slug such as
+        `rest_post_invalid_page_number` or `rest_invalid_param`; `data.status` repeats the HTTP
+        status.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RestError'
+  schemas:
+    RestError:
+      type: object
+      required: [ code, message ]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        data:
+          type: object
+          properties:
+            status: { type: integer }
+    Rendered:
+      type: object
+      properties:
+        rendered: { type: string }
+        protected: { type: boolean }
+    Page:
+      type: object
+      description: >-
+        Field set observed on this deployment on 2026-09-01. No UKM-local fields were found; the
+        record model is stock WordPress.
+      properties:
+        id: { type: integer }
+        date: { type: string }
+        date_gmt: { type: string }
+        guid:
+          $ref: '#/components/schemas/Rendered'
+        modified: { type: string }
+        modified_gmt: { type: string }
+        slug: { type: string }
+        status: { type: string }
+        type: { type: string }
+        link: { type: string, format: uri }
+        title:
+          $ref: '#/components/schemas/Rendered'
+        content:
+          $ref: '#/components/schemas/Rendered'
+        excerpt:
+          $ref: '#/components/schemas/Rendered'
+        author: { type: integer }
+        featured_media: { type: integer }
+        parent: { type: integer }
+        menu_order: { type: integer }
+        comment_status: { type: string }
+        ping_status: { type: string }
+        template: { type: string }
+        meta: {}
+        class_list:
+          type: array
+          items: { type: string }
+        _links: { type: object }

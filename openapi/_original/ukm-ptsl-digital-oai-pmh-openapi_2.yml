@@ -1,0 +1,121 @@
+# x-archived-from: ukm-ptsl-digital-oai-pmh-openapi.yml
+# x-archived-on: 2026-09-16
+# generated: '2026-09-01'
+# method: probed
+# source: live probes of https://ptsldigital.ukm.my/oai/request (Identify, ListMetadataFormats,
+#   ListSets and a badVerb error response), 2026-09-01.
+# x-operator: institution
+# NOTE: UKM publishes no OpenAPI for this endpoint. Every path, parameter, verb value and metadata
+# format below was observed in a live response. This is the pristine pre-refine copy.
+openapi: 3.1.0
+info:
+  title: UKM Learning and Research Repository — OAI-PMH 2.0
+  version: '2.0'
+  summary: OAI-PMH metadata harvesting interface for UKM's DSpace 6.3 institutional repository.
+  description: >-
+    Institution-operated OAI-PMH 2.0 harvesting interface for the UKM Learning and Research
+    Repository, a DSpace 6.3 instance self-hosted by Perpustakaan Tun Seri Lanang (UKM Library)
+    on Universiti Kebangsaan Malaysia's own domain, ptsldigital.ukm.my. Repository name "UKM
+    Learning and Research Repository", adminEmail tek_lib@ukm.edu.my, repositoryIdentifier
+    http://ptsldigitalv2.ukm.my, earliestDatestamp 2022-10-03T08:48:53Z, deletedRecord policy
+    "transient", granularity to the second. Twelve metadata formats are offered: uketd_dc, qdc,
+    didl, mods, ore, mets, oai_dc, rdf, marc, xoai, dim, etdms. No authentication.
+
+    This description was written by API Evangelist from live probes of the endpoint on 2026-09-01;
+    UKM publishes no OpenAPI of its own. The software is DSpace; the deployment, the host, the
+    content and the operation are the institution's. The DSpace REST API on this instance is NOT
+    publicly reachable — /rest redirects to port 8443, which does not answer.
+  contact:
+    name: Perpustakaan Tun Seri Lanang (UKM Library)
+    email: tek_lib@ukm.edu.my
+    url: https://ptsldigital.ukm.my/
+  x-operator: institution
+  x-institution: Universiti Kebangsaan Malaysia
+  x-software: DSpace 6.3
+  x-provenance:
+    generated: '2026-09-01'
+    method: probed
+    source: https://ptsldigital.ukm.my/oai/request?verb=Identify
+servers:
+  - url: https://ptsldigital.ukm.my/oai
+    description: Institution-operated OAI-PMH endpoint
+tags:
+  - name: OAI-PMH
+    description: Open Archives Initiative Protocol for Metadata Harvesting, version 2.0.
+paths:
+  /request:
+    get:
+      operationId: oaiRequest
+      tags: [ OAI-PMH ]
+      summary: OAI-PMH 2.0 request endpoint
+      description: >-
+        Single OAI-PMH endpoint. The `verb` parameter selects the operation. All six protocol verbs
+        were verified live on 2026-09-01. Protocol errors are returned inside an XML `<error>`
+        element with HTTP status 200, as the OAI-PMH specification requires.
+      parameters:
+        - name: verb
+          in: query
+          required: true
+          description: OAI-PMH verb.
+          schema:
+            type: string
+            enum: [ Identify, ListMetadataFormats, ListSets, ListIdentifiers, ListRecords, GetRecord ]
+          examples:
+            identify: { value: Identify }
+        - name: metadataPrefix
+          in: query
+          required: false
+          description: >-
+            Metadata format. Required for ListIdentifiers, ListRecords and GetRecord. Twelve formats
+            are offered by this deployment.
+          schema:
+            type: string
+            enum: [ uketd_dc, qdc, didl, mods, ore, mets, oai_dc, rdf, marc, xoai, dim, etdms ]
+        - name: identifier
+          in: query
+          required: false
+          description: OAI identifier of a single record. Required for GetRecord.
+          schema:
+            type: string
+          example: 'oai:http://ptsldigitalv2.ukm.my:123456789/1234'
+        - name: set
+          in: query
+          required: false
+          description: Set spec to restrict a selective harvest to one DSpace collection.
+          schema:
+            type: string
+        - name: from
+          in: query
+          required: false
+          description: Lower bound of the datestamp range. Granularity YYYY-MM-DDThh:mm:ssZ.
+          schema:
+            type: string
+        - name: until
+          in: query
+          required: false
+          description: Upper bound of the datestamp range.
+          schema:
+            type: string
+        - name: resumptionToken
+          in: query
+          required: false
+          description: Flow-control token returned by an incomplete list response.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: >-
+            OAI-PMH XML response. Protocol errors also return 200 with an `<error>` element — read
+            the body, not the status code.
+          content:
+            text/xml:
+              schema:
+                type: string
+                contentMediaType: text/xml
+              examples:
+                identify:
+                  summary: Identify response (captured 2026-09-01)
+                  externalValue: ../examples/ukm-ptsldigital-oai-identify.xml
+                badVerb:
+                  summary: Protocol error returned with HTTP 200
+                  externalValue: ../examples/ukm-ptsldigital-oai-badverb.xml
