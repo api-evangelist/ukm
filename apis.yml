@@ -221,94 +221,6 @@ apis:
   properties:
   - type: Documentation
     url: https://eresourcesptsl.ukm.remotexs.co/
-- aid: ukm:ukm-content-api
-  name: Universiti Kebangsaan Malaysia Content API
-  description: Pages, posts and media.
-  humanURL: https://sso.ukm.my/
-  baseURL: https://sso.ukm.my/saml2/idp
-  tags:
-  - Content
-  properties:
-  - type: OpenAPI
-    url: openapi/ukm-content-api-openapi.yml
-  - type: Metadata
-    url: https://sso.ukm.my/saml2/idp/metadata.php
-  - type: Examples
-    url: examples/ukm-sso-saml-idp-metadata.xml
-  - type: Authentication
-    url: authentication/ukm-authentication.yml
-  - type: Conformance
-    url: conformance/ukm-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/ukm-lifecycle.yml
-  - type: Documentation
-    url: https://ptsldigital.ukm.my/
-  - type: OAI-PMH
-    url: https://ptsldigital.ukm.my/oai/request?verb=Identify
-  - type: Examples
-    url: examples/ukm-ptsldigital-oai-identify.xml
-  - type: Errors
-    url: errors/ukm-errors.yml
-  - type: Vocabulary
-    url: vocabulary/ukm-vocabulary.yml
-  - type: Documentation
-    url: https://ejournal.ukm.my/
-  - type: OAI-PMH
-    url: https://ejournal.ukm.my/index.php/index/oai?verb=Identify
-  - type: Examples
-    url: examples/ukm-ejournal-oai-identify.xml
-  - type: APIReference
-    url: https://www.ukm.my/portal/wp-json/
-  - type: JSONSchema
-    url: json-schema/ukm-wordpress-page-schema.json
-  - type: Examples
-    url: examples/ukm-portal-wp-json-root.json
-  - type: Examples
-    url: examples/ukm-portal-wp-page.json
-- aid: ukm:ukm-discovery-api
-  name: Universiti Kebangsaan Malaysia Discovery API
-  description: Self-descriptive route index.
-  humanURL: https://sso.ukm.my/
-  baseURL: https://sso.ukm.my/saml2/idp
-  tags:
-  - Discovery
-  properties:
-  - type: OpenAPI
-    url: openapi/ukm-discovery-api-openapi.yml
-  - type: Metadata
-    url: https://sso.ukm.my/saml2/idp/metadata.php
-  - type: Examples
-    url: examples/ukm-sso-saml-idp-metadata.xml
-  - type: Authentication
-    url: authentication/ukm-authentication.yml
-  - type: Conformance
-    url: conformance/ukm-conformance.yml
-  - type: Lifecycle
-    url: lifecycle/ukm-lifecycle.yml
-  - type: Documentation
-    url: https://ptsldigital.ukm.my/
-  - type: OAI-PMH
-    url: https://ptsldigital.ukm.my/oai/request?verb=Identify
-  - type: Examples
-    url: examples/ukm-ptsldigital-oai-identify.xml
-  - type: Errors
-    url: errors/ukm-errors.yml
-  - type: Vocabulary
-    url: vocabulary/ukm-vocabulary.yml
-  - type: Documentation
-    url: https://ejournal.ukm.my/
-  - type: OAI-PMH
-    url: https://ejournal.ukm.my/index.php/index/oai?verb=Identify
-  - type: Examples
-    url: examples/ukm-ejournal-oai-identify.xml
-  - type: APIReference
-    url: https://www.ukm.my/portal/wp-json/
-  - type: JSONSchema
-    url: json-schema/ukm-wordpress-page-schema.json
-  - type: Examples
-    url: examples/ukm-portal-wp-json-root.json
-  - type: Examples
-    url: examples/ukm-portal-wp-page.json
 - aid: ukm:ukm-metadata-api
   name: Universiti Kebangsaan Malaysia Metadata API
   description: SAML 2.0 metadata publication.
@@ -443,6 +355,21 @@ apis:
     url: examples/ukm-portal-wp-json-root.json
   - type: Examples
     url: examples/ukm-portal-wp-page.json
+- aid: ukm:ukm-my-portal-website-wordpress-rest
+  name: Universiti Kebangsaan Malaysia Website (WordPress REST)
+  description: >-
+    The public WordPress REST API (wp-json) of the Universiti Kebangsaan Malaysia website at www.ukm.my/portal:
+    the route index of the site's content management system, catalogued as one site surface rather than
+    as separate APIs.
+  baseURL: https://www.ukm.my/portal/wp-json
+  tags:
+  - WordPress
+  x-surface: platform-generated
+  x-platform: wordpress
+  x-platform-surface: rest
+  properties:
+  - type: Documentation
+    url: https://www.ukm.my/portal/wp-json
 common:
   - type: Website
     url: https://www.ukm.my/portal/

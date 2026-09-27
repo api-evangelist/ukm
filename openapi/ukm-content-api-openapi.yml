@@ -189,6 +189,21 @@ paths:
           $ref: '#/components/responses/RestError'
 components:
   schemas:
+    RestError:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            status:
+              type: integer
     Page:
       type: object
       description: Field set observed on this deployment on 2026-09-01. No UKM-local fields were found; the record model is stock WordPress.
@@ -248,21 +263,6 @@ components:
           type: string
         protected:
           type: boolean
-    RestError:
-      type: object
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        data:
-          type: object
-          properties:
-            status:
-              type: integer
   responses:
     RestError:
       description: WordPress REST error envelope. `code` is a machine-readable slug such as `rest_post_invalid_page_number` or `rest_invalid_param`; `data.status` repeats the HTTP status.
