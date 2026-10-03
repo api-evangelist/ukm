@@ -29,7 +29,7 @@
     "ukm-identity-federation-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "ukm-ptsl-digital-oai-pmh-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "tag 'OAI-PMH' spans 2 source specs (ukm-ejournal-oai-pmh-openapi.yml, ukm-ptsl-digital-oai-pmh-openapi.yml): per-path servers applied",
-    "apis.yml register: written (+1 apis, 9 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "_original/ukm-ptsl-digital-oai-pmh-openapi_2.yml: archived document superseded by a larger archived document",
