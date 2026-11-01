@@ -1,4 +1,4 @@
-# Universiti Kebangsaan Malaysia (ukm)
+# Universiti Kebangsaan Malaysia
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,107 +64,130 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Universiti Kebangsaan Malaysia (UKM), The National University of Malaysia, is a public research university in Bangi, Selangor, established 1970 ([ROR 00bw8d226](https://ror.org/00bw8d226)). This repository catalogs UKM's public, machine-readable footprint as an [APIs.json](http://apisjson.org) profile, under the API Evangelist **university** pipeline — which settles *who operates* each surface before saving anything.
+Universiti Kebangsaan Malaysia (UKM), The National University of Malaysia, is a public research university in Bangi, Selangor, established 1970, ROR https://ror.org/00bw8d226. It publishes no developer portal, no API documentation, no OpenAPI, no changelog, no status page, no robots.txt, no sitemap.xml and no llms.txt — every one of those returns 404 on www.ukm.my. What it does operate, on its own domain and its own infrastructure, is four unauthenticated machine-readable surfaces that it has never described anywhere. The largest is its own identity provider: SSO@UKM at sso.ukm.my is a SimpleSAMLphp SAML 2.0 IdP publishing unauthenticated metadata with signing and encryption keys, SSO and SLO bindings and a technical contact, and it is demonstrably in production — the library's LibQuest service hands an unauthenticated visitor straight to it as SAML SP smuSSO-sp. UKM is nevertheless absent from eduGAIN; a scan of all 10,615 eduGAIN entities on 2026-09-01 found no ukm.my entity while sixteen other Malaysian institutions are registered through SIFULAN. The scholarly surfaces are two live OAI-PMH 2.0 endpoints run by Perpustakaan Tun Seri Lanang (the UKM Library): the DSpace 6.3 UKM Learning and Research Repository at ptsldigital.ukm.my with twelve metadata formats, and the OJS 2.4.8.1 UKM e-Journal System at ejournal.ukm.my with five formats and 100 sets — the latter never previously catalogued here. Both platforms are years past end of support. Behind them sits a real identifier footprint: three Crossref memberships owned by UKM units, led by UKM Press with prefix 10.17576 and 16,243 DOIs. A third repository, journalarticle.ukm.my, is registered in OpenDOAR and ROAR but has not answered on port 80 or 443 across probes in June and September 2026. The fourth surface is incidental rather than intentional: UKM runs its web estate on self-hosted WordPress and leaves the wp/v2 REST API open for unauthenticated reads — 314 routes on the main portal, a second installation on the Berita UKM news site. It is the closest thing the university has to a public read API for its own content, and nothing about it is documented or governed. Nothing in this profile is a vendor contract attributed to UKM. Two vendor tenancies are recorded as relationships only — Springshare LibGuides and a RemoteXs e-resources proxy. No course catalog, open data portal, research computing or library discovery API was found; the GEMILANG discovery service did not answer.
 
-UKM publishes no developer portal, no API documentation, no OpenAPI, no changelog and no status page. What it does operate, unauthenticated and on its own domain, is four machine-readable surfaces it has never described anywhere: a SAML 2.0 identity provider, two OAI-PMH 2.0 endpoints, and an open WordPress `wp/v2` REST API on two installations.
+**Areas:** University · Higher Education · Education · Research · Malaysia · Southeast Asia · Identity Federation · SAML · Research Repository · Institutional Repository · OAI-PMH · Open Access
 
-- APIs.json: https://raw.githubusercontent.com/api-evangelist/ukm/refs/heads/main/apis.yml
-- Run with Naftiko: https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=ukm-api-evangelist&utm_content=repo
+## Universiti Kebangsaan Malaysia on APIs.io
 
-## Type
+Everything profiled for Universiti Kebangsaan Malaysia is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/ukm/](https://apis.io/providers/ukm/)** — or go straight to one of the APIs or properties below.
 
-- university / Public Research University
-- Index
-- Consumer
-- Public
+### APIs (9)
 
-## Tags
+- [UKM Journal Article Repository (OAI-PMH) — unreachable](https://apis.io/apis/ukm/journal-article-repository-oai/) — EPrints repository of journal articles published by UKM faculties, institutes and UKM Press, registered in OpenDOAR (record 2122) and ROAR as supporting…
+- [Crossref DOI Registration (UKM Press and UKM faculties)](https://apis.io/apis/ukm/crossref-membership/) — Three Crossref memberships are held by units of Universiti Kebangsaan Malaysia, together accounting for 16,447 registered DOIs: member 7332, Penerbit…
+- [ROR Organization Registration](https://apis.io/apis/ukm/ror-registration/) — Universiti Kebangsaan Malaysia is registered in the Research Organization Registry as https://ror.org/00bw8d226, created 2018-11-14 and last modified…
+- [Springshare LibGuides (tenant deployment)](https://apis.io/apis/ukm/libguides-tenant/) — Perpustakaan Tun Seri Lanang runs its research and subject guides on a Springshare LibGuides tenant at ukm.libguides.com — an institution-specific subdomain…
+- [RemoteXs E-Resources Proxy (tenant deployment)](https://apis.io/apis/ukm/remotexs-tenant/) — UKM Library's off-campus access to licensed e-resources runs on a RemoteXs tenant at eresourcesptsl.ukm.remotexs.co — a vendor host carrying a UKM-specific…
+- [Universiti Kebangsaan Malaysia Metadata API](https://apis.io/apis/ukm/ukm-metadata-api/) — SAML 2.0 metadata publication.
+- [Universiti Kebangsaan Malaysia OAI PMH API](https://apis.io/apis/ukm/ukm-oai-pmh-api/) — Open Archives Initiative Protocol for Metadata Harvesting, version 2.0.
+- [Universiti Kebangsaan Malaysia Single Sign-On API](https://apis.io/apis/ukm/ukm-single-sign-on-api/) — SAML 2.0 browser SSO and single logout profiles.
+- [Universiti Kebangsaan Malaysia Website (WordPress REST)](https://apis.io/apis/ukm/ukm-my-portal-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the Universiti Kebangsaan Malaysia website at www.ukm.my/portal: the route index of the site's content management…
 
-University, Higher Education, Education, Research, Malaysia, Southeast Asia, Identity Federation, SAML, Research Repository, Institutional Repository, OAI-PMH, Open Access, Scholarly Publishing, Library, Theses
+### Published properties
 
-## Surfaces
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Every entry carries an `x-operator`. `institution` means UKM runs the thing the contract describes; `registry` means UKM is registered in someone else's registry; `tenant` means UKM's account on a vendor's platform, where the data is UKM's and the contract is the vendor's.
+#### JSON Schema (1)
 
-### institution
+The data models the API reads and writes.
 
-- **SSO@UKM — SAML 2.0 Identity Provider** — SimpleSAMLphp IdP publishing unauthenticated SAML 2.0 metadata. In production (libquest.ukm.my is a registered SP). Not in eduGAIN.
-  - Metadata: https://sso.ukm.my/saml2/idp/metadata.php
-  - [openapi/ukm-identity-federation-openapi.yml](openapi/ukm-identity-federation-openapi.yml)
-- **UKM Learning and Research Repository (OAI-PMH)** — DSpace 6.3, twelve metadata formats, run by Perpustakaan Tun Seri Lanang.
-  - OAI-PMH: https://ptsldigital.ukm.my/oai/request?verb=Identify
-  - [openapi/ukm-ptsl-digital-oai-pmh-openapi.yml](openapi/ukm-ptsl-digital-oai-pmh-openapi.yml)
-- **UKM e-Journal System (OAI-PMH)** — Open Journal Systems 2.4.8.1, five metadata formats, 100 sets. Not previously catalogued.
-  - OAI-PMH: https://ejournal.ukm.my/index.php/index/oai?verb=Identify
-  - [openapi/ukm-ejournal-oai-pmh-openapi.yml](openapi/ukm-ejournal-oai-pmh-openapi.yml)
-- **UKM Web Content REST API (WordPress wp/v2)** — 314 routes, unauthenticated reads, two installations. Undocumented and ungoverned.
-  - Route index: https://www.ukm.my/portal/wp-json/
-  - [openapi/ukm-web-content-rest-openapi.yml](openapi/ukm-web-content-rest-openapi.yml)
-- **UKM Journal Article Repository (OAI-PMH) — unreachable** — EPrints repository registered in OpenDOAR and ROAR. `journalarticle.ukm.my` resolves but has not answered on port 80 or 443 since at least June 2026. Retained as a fact; its dead pointers were removed.
-  - Registry: https://opendoar.ac.uk/repository/2122
+- [UKM Web Content — WordPress page record](https://apis.io/schemas/ukm/ukm-wordpress-page/)
 
-### registry
+#### JSON-LD (1)
 
-- **Crossref DOI Registration** — three memberships owned by UKM units, 16,447 DOIs: [7332 UKM Press](https://api.crossref.org/members/7332) (10.17576), [8124 Faculty of Medicine](https://api.crossref.org/members/8124) (10.17845), [11019 Research Centre for Sharia](https://api.crossref.org/members/11019) (10.26475).
-- **ROR Organization Registration** — https://ror.org/00bw8d226
+Linked-data contexts for the provider's vocabulary.
 
-### tenant
+- [Ukm Context](https://apis.io/jsonld/ukm/ukm-context/)
 
-- **Springshare LibGuides** — https://ukm.libguides.com/ — relationship recorded, vendor contract not saved.
-- **RemoteXs E-Resources Proxy** — https://eresourcesptsl.ukm.remotexs.co/ — relationship recorded, vendor contract not saved.
+#### Examples (1)
 
-## Artifacts
+Example requests and responses.
 
-- OpenAPI: [openapi/](openapi/) (pristine pre-refine copies in [openapi/_original/](openapi/_original/))
-- JSON Schema: [json-schema/ukm-wordpress-page-schema.json](json-schema/ukm-wordpress-page-schema.json)
-- Examples: [examples/](examples/)
-- Conformance: [conformance/ukm-conformance.yml](conformance/ukm-conformance.yml)
-- Authentication: [authentication/ukm-authentication.yml](authentication/ukm-authentication.yml)
-- Errors: [errors/ukm-errors.yml](errors/ukm-errors.yml)
-- Lifecycle: [lifecycle/ukm-lifecycle.yml](lifecycle/ukm-lifecycle.yml)
-- Vocabulary: [vocabulary/ukm-vocabulary.yml](vocabulary/ukm-vocabulary.yml)
-- JSON-LD: [json-ld/ukm-context.jsonld](json-ld/ukm-context.jsonld)
-- Plans: [plans/ukm-plans-pricing.yml](plans/ukm-plans-pricing.yml)
-- Rate Limits: [rate-limits/ukm-rate-limits.yml](rate-limits/ukm-rate-limits.yml)
-- FinOps: [finops/ukm-finops.yml](finops/ukm-finops.yml)
-- Domain Security: [security/ukm-domain-security.yml](security/ukm-domain-security.yml)
-- Review: [review.yml](review.yml)
+- [Ukm Portal Wp Json Root](https://apis.io/examples/ukm/ukm-portal-wp-json-root/)
 
-## Domain standard conformance (education regime)
+#### Security (2)
 
-Evidenced from UKM's own surfaces only. See [conformance/ukm-conformance.yml](conformance/ukm-conformance.yml).
+Authentication, trust centre, and vulnerability disclosure.
 
-- **oai-pmh** — conformant, two live institution-operated endpoints.
-- **saml** — conformant, with published gaps (non-URI entityID, unsigned metadata, transient NameID only).
-- **crossref** — registered, three memberships.
-- Not found: shibboleth, datacite, orcid, scim, lti, oneroster, ed-fi, caliper, qti.
+- [Ukm Authentication](https://apis.io/security/ukm/ukm-authentication/)
+- [Ukm Domain Security](https://apis.io/security/ukm/ukm-domain-security/)
 
-## Timestamps
+#### Plans and pricing (1)
 
-- Created: 2026-06-03
-- Modified: 2026-09-01
+Published plans, tiers and prices.
 
-## Common Properties
+- [Ukm Plans Pricing](https://apis.io/plans/ukm/ukm-plans-pricing/)
 
-- Website: https://www.ukm.my/portal/
-- Blog: https://www.ukm.my/beritaukm/ (RSS: https://www.ukm.my/beritaukm/feed/)
-- API Reference: https://www.ukm.my/portal/wp-json/
-- Identity Federation: https://sso.ukm.my/saml2/idp/metadata.php
-- Research Repository: https://ptsldigital.ukm.my/ and https://ejournal.ukm.my/
-- Library: https://www.ukm.my/ptsl/
-- LinkedIn: https://www.linkedin.com/school/universitikebangsaanmalaysia/
+#### Rate limits (1)
 
-## Notes
+Published request limits.
 
-- Re-profiled 2026-09-01 under the university pipeline. Every OpenAPI in this repo was written by API Evangelist from live probes and is marked `method: probed` — UKM publishes none of its own.
-- No vendor contract had been misattributed to UKM, so nothing was removed on that account. The two vendor tenancies found are recorded as relationships only.
-- Every pointer emitted here was fetched and confirmed live on 2026-09-01. Dead pointers to `journalarticle.ukm.my` were removed; the stale `www.ukm.my/portalukm/` Website pointer was corrected to `www.ukm.my/portal/`.
-- `www.ukm.my` returns 404 for robots.txt, sitemap.xml, llms.txt and .well-known/security.txt. `sso.ukm.my` has no OpenID Connect discovery document.
-- UKM is **not** registered in eduGAIN — all 10,615 entities were scanned on 2026-09-01 — while sixteen other Malaysian institutions are, via SIFULAN.
-- Both scholarly platforms are years past end of support: DSpace 6.3 (EOL 2023) and OJS 2.4.8.1 (EOL 2020).
-- No official UKM GitHub organization was found; `github.com/ukm` is an unrelated personal account and is deliberately excluded. `UKM-HEP` and `UKM-NUKE` are research-group orgs with no evidenced institutional endorsement and are not credited.
-- No course catalog, timetable, registrar, open data portal, research computing surface or AI policy was found. No endpoints were fabricated.
+- [Ukm Rate Limits](https://apis.io/rate-limits/ukm/ukm-rate-limits/)
 
-## Maintainers
+#### FinOps (1)
 
-- Kin Lane — kin@apievangelist.com
+What the API costs to run, by operation.
+
+- [Ukm Finops](https://apis.io/finops/ukm/ukm-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.ukm.my/portal/)
+- [API reference](https://www.ukm.my/portal/wp-json/)
+- [Blog](https://www.ukm.my/beritaukm/)
+
+## API Evangelist rating
+
+**Kin Score 24.4** — emerging · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 62.5 |
+| Contract quality | 38.3 |
+| Contract governance | 15.2 |
+| Operational transparency | 5.3 |
+| Developer ergonomics | 26.2 |
+| Access clarity | 5.3 |
+
+**Agent readiness 24.5** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | — |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Education & Research
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/ukm/](https://apis.io/providers/ukm/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Universiti Kebangsaan Malaysia: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/ukm/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
